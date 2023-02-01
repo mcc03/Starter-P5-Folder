@@ -1,16 +1,19 @@
-let numBlocks = 9;
+let numBlocks = 8;
 let chartWidth = 400;
 let chartHeight = 400;
 let marginLeft = 10;
 let marginRight = 10;
 let blockGap = 20;
+// ((400−(10+10))−(8−1)×20)÷8
 let blockWidth = (chartWidth - (marginLeft + marginRight) - ((numBlocks - 1)* blockGap))/numBlocks;
 let screenWidth = 500;
 let screenHeight = 500;
+// screen width = 500, chart width = 400. 500 - 400 = 100/2 = 50 + marginLeft = 60, the start pos.
 let firstBlockxPos = ((screenWidth - chartWidth)/2)+ marginLeft;
 let masterGap = blockWidth+blockGap;
 
 console.log(blockWidth)
+
 
 
 // called once
@@ -25,8 +28,9 @@ function draw(){
     fill(0);
     for(let x=0; x < numBlocks; x++){
         push();
+        // 60 + num of block * blockW+20, 400
         translate(firstBlockxPos + (x*masterGap), chartHeight);
-        rect(0,0,blockWidth,random(-50,-400));
+        rect(0,0,blockWidth,random(-20,-400));
         pop();
     }
   

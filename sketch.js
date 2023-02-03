@@ -1,4 +1,6 @@
-let numBlocks = 8;
+let data = [2000, 1000, 700, 423, 350, 100, 250, 900, 1300]
+let maxValue = Math.max(...data);
+let numBlocks = data.length;
 let chartWidth = 400;
 let chartHeight = 400;
 let marginLeft = 10;
@@ -12,9 +14,29 @@ let screenHeight = 500;
 let firstBlockxPos = ((screenWidth - chartWidth)/2)+ marginLeft;
 let masterGap = blockWidth+blockGap;
 
-console.log(blockWidth)
+// let scaleValue = chartHeight/maxValue;
+// console.log("The max value in the array is:", maxValue);
+// console.log("This value will be used to scale the other values:", scaleValue);
+
+// let scaleRatio = scaleValue*maxValue;
+// console.log(scaleRatio);
 
 
+
+// console.log(blockWidth)
+
+function squarer(_num){
+        let squared = _num * _num;
+        return squared;
+}
+squarer(3);
+
+function scaler(_num){
+    for(let x=0; x < data.length; x++){
+        let scaleValue = chartHeight/maxValue;
+        return _num*scaleValue
+    }
+}
 
 // called once
 function setup(){
@@ -26,11 +48,15 @@ function setup(){
 function draw(){
     background(200);
     fill(0);
-    for(let x=0; x < numBlocks; x++){
+    for(let x=0; x < data.length; x++){
         push();
         // 60 + num of block * blockW+20, 400
-        translate(firstBlockxPos + (x*masterGap), chartHeight);
-        rect(0,0,blockWidth,random(-20,-400));
+        // each loop it moves the canvas
+        translate(firstBlockxPos + (x*masterGap), 450);
+        noStroke();
+        fill(data[x],0,0)
+        rect(0,0,blockWidth,scaler(-data[x]));
+        console.log(data.length);
         pop();
     }
   

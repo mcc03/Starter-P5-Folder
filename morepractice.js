@@ -21,8 +21,8 @@ let bars = fruits.length;
 let barGap = 20;
 let barWidth = (chartSize - (leftMargin + rightMargin) -((bars - 1)*barGap))/bars;
 let barSpacing = barWidth+barGap;
-let markerSize = -5;
-let markers = 5;
+// console.log(markerGap)
+// console.log(textGap)
 
 console.log(barWidth);
 console.log(highestValue);
@@ -37,41 +37,60 @@ function scaler(_numScale){
 function setup(){
     createCanvas(screenHeight, screenWidth);
     noLoop();
+    angleMode(DEGREES);
 }
 
-function draw(){
-    background(100);
-    translate(chartxPos,chartyPos)
+// creates axis with markers
+// draws the markers on the y-axis
+// highestValue/markers = 180, each time x increases it adds another 180 
+function createAxis( _pos, _markers, _markerSize, _labels, _rotationAngle ,_strokeColour, _strokeWeight){
+
+    let markerGap = chartSize/_markers;
+    let textGap = highestValue/_markers;
+    translate(_pos.x, _pos.y);
+    rotate(_rotationAngle);
+    stroke(_strokeColour);
+    strokeWeight(_strokeWeight); 
     
-    for(let x = 0; x < fruits.length; x++){
-        push();
-        translate(leftMargin + (x*barSpacing), 0);
-        fill(fruits[x].sales/3,255,0);
-        rect(0,0,barWidth,scaler(-fruits[x].sales));
-        pop();
+    // draws the markers
+    for(let x = 0; x <= _markers ;x++){
+        line(0,x*-markerGap,_markerSize,x*-markerGap)
+        noStroke;
+        // rounding numbers to 2decimals
+        
+        // enables and disables axis labels
+        if(_labels == true){        
+            textAlign(LEFT, CENTER)
+            text(int(x*textGap).toFixed(2), -40, x*-markerGap);
+        }
+
     }
+
+    // if(_rotationAngle > 180){
+    //     _markerSize*-1
+    // }
 
     strokeWeight(2);
     // y-axis
     line(0,0,chartSize,0);
     // x-axis
     line(0,-chartSize,0,0);
-
-    let markerGap = chartSize/markers;
-    let textGap = highestValue/markers;
-    console.log(markerGap)
-    console.log(textGap)
-
-    // draws the markers on the y-axis
-    // highestValue/markers = 180, each time x increases it adds another 180 for the next marker
-    for(let x = 0; x <= markers ;x++){
-        line(0,x*-markerGap,markerSize,x*-markerGap)
-        noStroke;
-        // rounding numbers to 2decimals
-        textAlign(LEFT, CENTER)
-        text(int(x*textGap).toFixed(2), -40, x*-markerGap);
-    }
-
-
-    
 }
+
+function draw(){
+    background(100);
+    translate(chartxPos,chartyPos)
+
+    for(let x = 0; x < fruits.length; x++){
+        push();
+        translate(leftMargin + (x*barSpacing), 0);
+        fill(fruits[x].sales/3,255,0);
+        rect(0,0,barWidth, scaler(-fruits[x].sales));
+        pop();
+    }
+    
+    //  _pos, _markers, _markerSize, _labels, _rotationAngle, _strokeColour, _strokeWeight
+    createAxis(createVector(0,0), 5, -5, true, 0, 50, 1);   
+}
+
+// rotate y axis, over certain angle change marker sides (boolean?)

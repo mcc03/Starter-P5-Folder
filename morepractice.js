@@ -43,14 +43,15 @@ function setup(){
 // creates axis with markers
 // draws the markers on the y-axis
 // highestValue/markers = 180, each time x increases it adds another 180 
-function createAxis( _pos, _markers, _markerSize, _labels, _rotationAngle ,_strokeColour, _strokeWeight){
+function createAxis( _pos, _markers, _markerSize, _labels, _rotationAngle ,_strokeColour, _strokeWeight, _ylineAngle, _yline){
 
     let markerGap = chartSize/_markers;
     let textGap = highestValue/_markers;
     translate(_pos.x, _pos.y);
     rotate(_rotationAngle);
     stroke(_strokeColour);
-    strokeWeight(_strokeWeight); 
+    strokeWeight(_strokeWeight);
+    line(_ylineAngle, _yline, 0, 0); 
     
     // draws the markers
     for(let x = 0; x <= _markers ;x++){
@@ -63,19 +64,26 @@ function createAxis( _pos, _markers, _markerSize, _labels, _rotationAngle ,_stro
             textAlign(LEFT, CENTER)
             text(int(x*textGap).toFixed(2), -40, x*-markerGap);
         }
-
     }
 
-    // if(_rotationAngle > 180){
+    // if(_rotationAngle >= 45){
     //     _markerSize*-1
     // }
 
+    console.log("test", _rotationAngle);
+    console.log(_markerSize);
+    console.log("line length", _yline);
+    console.log("line angle", _ylineAngle);
+    console.log(_markerSize);
+
     strokeWeight(2);
-    // y-axis
-    line(0,0,chartSize,0);
     // x-axis
-    line(0,-chartSize,0,0);
+    line(0,0,chartSize,0);
+    // y-axis
+    // line(0,-chartSize,0,0);
 }
+
+
 
 function draw(){
     background(100);
@@ -89,8 +97,8 @@ function draw(){
         pop();
     }
     
-    //  _pos, _markers, _markerSize, _labels, _rotationAngle, _strokeColour, _strokeWeight
-    createAxis(createVector(0,0), 5, -5, true, 0, 50, 1);   
+    //_pos, _markers, _markerSize, _labels, _rotationAngle ,_strokeColour, _strokeWeight, _ylineAngle, _yline
+    createAxis(createVector(0,0), 5, -5, true, 0, 50, 1, 200, -400);   
 }
 
 // rotate y axis, over certain angle change marker sides (boolean?)

@@ -56,14 +56,14 @@ function createAxis( _pos, _markers, _markerSize, _labels, _rotationAngle ,_stro
     // draws the markers
     for(let x = 0; x <= _markers ;x++){
         // mid markerSize
-        line(0,x*-markerGap,_ylineAngle,x*-markerGap)
+        line(0,x*-markerGap,_markerSize,x*-markerGap)
         noStroke;
         // rounding numbers to 2decimals
         
         // enables and disables axis labels
         if(_labels == true){        
             textAlign(LEFT, CENTER)
-            text(int(x*textGap).toFixed(2), _ylineAngle, x*-markerGap);
+            text(int(x*textGap).toFixed(2), -40, x*-markerGap);
         }
     }
 
@@ -99,7 +99,7 @@ function draw(){
     }
     
     //_pos, _markers, _markerSize, _labels, _rotationAngle ,_strokeColour, _strokeWeight, _ylineAngle, _yline
-    createAxis(createVector(0,0), 5, -5, true, 0, 50, 1, 200, -400);   
+    createAxis(createVector(0,0), 5, -5, true, 0, 50, 1, 0, -400);   
 }
 
 // rotate y axis, over certain angle change marker sides (boolean?)

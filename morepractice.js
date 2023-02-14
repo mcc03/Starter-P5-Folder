@@ -55,14 +55,15 @@ function createAxis( _pos, _markers, _markerSize, _labels, _rotationAngle ,_stro
     
     // draws the markers
     for(let x = 0; x <= _markers ;x++){
-        line(0,x*-markerGap,_markerSize,x*-markerGap)
+        // mid markerSize
+        line(0,x*-markerGap,_ylineAngle,x*-markerGap)
         noStroke;
         // rounding numbers to 2decimals
         
         // enables and disables axis labels
         if(_labels == true){        
             textAlign(LEFT, CENTER)
-            text(int(x*textGap).toFixed(2), -40, x*-markerGap);
+            text(int(x*textGap).toFixed(2), _ylineAngle, x*-markerGap);
         }
     }
 

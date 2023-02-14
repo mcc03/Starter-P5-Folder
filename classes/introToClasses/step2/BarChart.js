@@ -1,6 +1,6 @@
 class BarChart{
     // defines properties in object
-    constructor(_height,_width,_posX,_posY,_data, _bars, _barGap, _markerSize){
+    constructor(_height,_width,_posX,_posY,_data, _bars, _barGap, _markers, _markerSize){
         // this object height
         this.height = _height;
         this.width = _width;
@@ -10,9 +10,8 @@ class BarChart{
         this.bars = _bars;
         this.barGap = _barGap;
         this.markerSize = _markerSize
+        this.markers = 5;
         this.bars = fruits.length;
-
-        this.markers = fruits.length;
         this.leftMargin = 10;
         this.rightMargin = 10;
 
@@ -26,10 +25,10 @@ class BarChart{
         this.barSpacing = this.barWidth+this.barGap;
 
         // gets highest value from arrayName
-        this.highestValue = Math.max(...fruits);
+        this.highestValue = Math.max(...fruits.map(object => object.sales));
 
         // gap between labels
-        this.LabelGap = this.height/this.markers;
+        this.LabelGap = this.highestValue/this.markers;
 
         console.log("highest value is:", this.highestValue);
     }
@@ -76,7 +75,7 @@ class BarChart{
             translate(this.leftMargin + (x*this.barSpacing), 0)
             translate(10, 0);
             fill(255);
-            rect(0, 0,this.barWidth,this.barScaler(-fruits[x]));
+            rect(0, 0,this.barWidth,this.barScaler(-fruits[x].sales));
             pop();
         }
     }
@@ -92,12 +91,10 @@ class BarChart{
     // draws labels on the vertical axis
     chartLabels(){
         for(let x = 0; x <= this.markers ;x++){
-            noStroke;
-            fill(255);
+            strokeWeight(1)
             textAlign(LEFT, CENTER)
-            text(fruits[x], -40, x*-this.LabelGap);
+            text(int(x*this.LabelGap).toFixed(2), -40, x*-this.markerGap);
+        }
     }
-}
 
 }
-

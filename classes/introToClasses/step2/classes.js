@@ -1,5 +1,15 @@
 console.log("test2");
-let fruits = [50,150,400,200,250,900];
+let fruits = [
+    {name: "apple", sales:500},
+    {name: "apple", sales:600},
+    {name: "apple", sales:700},
+    {name: "apple", sales:800},
+    {name: "apple", sales:1000},
+    {name: "apple", sales:300},
+    {name: "apple", sales:370},
+    {name: "apple", sales:600}
+];
+
 let charts=[];
 
 // "new" = uses classes and objects
@@ -12,7 +22,7 @@ function setup(){
     angleMode(DEGREES);
     rectMode(CORNER);
 
-    charts.push(new BarChart(400, 400, 50, 450, fruits, fruits.length, 20, -5));
+    charts.push(new BarChart(400, 400, 50, 450, fruits, fruits.legth, 20, -5));
 
 }
 

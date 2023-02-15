@@ -98,3 +98,5 @@ class BarChart{
     }
 
 }
+
+// next week: grid lines, nice labels, colours

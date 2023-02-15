@@ -1,6 +1,6 @@
 class BarChart{
     // defines properties in object
-    constructor(_height,_width,_posX,_posY,_data, _bars, _barGap, _markers, _markerSize){
+    constructor(_height,_width,_posX,_posY,_data, _bars, _barGap, _markers, _markerSize, _numHgrid){
         // this object height
         this.height = _height;
         this.width = _width;
@@ -10,10 +10,12 @@ class BarChart{
         this.bars = _bars;
         this.barGap = _barGap;
         this.markerSize = _markerSize
-        this.markers = 5;
+        this.markers = _markers;
         this.bars = fruits.length;
         this.leftMargin = 10;
         this.rightMargin = 10;
+        this.numHgrid = _numHgrid
+        // this.gridCount = _gridCount;
 
         // gap between markers
         this.markerGap = this.height/this.markers;
@@ -30,7 +32,8 @@ class BarChart{
         // gap between labels
         this.LabelGap = this.highestValue/this.markers;
 
-        console.log("highest value is:", this.highestValue);
+        console.log("highest value is:", this.highestValue)
+        console.log("barWidth:", this.barWidth);
     }
 
     // calculates how to scale bars based off the highest value
@@ -51,22 +54,50 @@ class BarChart{
         this.barChart();
         this.chartMarkers();
         this.chartLabels();
+        this.hGrid();
+        this.vGrid();
+        this.barLabels();
         pop();
     }
 
     // draws vertical axis
     Vaxis(){
         noFill();
-        stroke(0)
+        strokeWeight(1);
+        stroke(0);
         line(0,0,0,-this.height)
     }
 
     // draw horizontal axis
     Haxis(){
         noFill();
-        stroke(0)
+        strokeWeight(1);
+        stroke(0);
         line(0,0,this.width,0)
     }
+
+    // draw horizontal grid lines
+    hGrid(){
+        // if(this.gridCount == true){
+            for(let x = 0; x <= this.markers ;x++){
+                stroke(150, 5);
+                strokeWeight(2);
+                line(this.markerSize, x*-this.markerGap, this.width, x*-this.markerGap)
+            }
+        // }   
+    }
+    
+     // draw horizontal grid lines
+     vGrid(){
+        // if(this.gridCount == true){
+            for(let x = 0; x <= this.numHgrid ;x++){
+                stroke(150, 5);
+                strokeWeight(2);
+                line(x*this.width/this.numHgrid, -this.height, x*this.width/this.numHgrid, 0)
+            }
+        // }   
+    }
+
 
     // draws bars
     barChart(){
@@ -83,18 +114,35 @@ class BarChart{
     // draws marks on Vaxis
     chartMarkers(){
         for(let x = 0; x <= this.markers ;x++){
+            strokeWeight(2);
             line(this.markerSize, x*-this.markerGap, 0, x*-this.markerGap)
-            noStroke;
     }
 }
 
     // draws labels on the vertical axis
     chartLabels(){
         for(let x = 0; x <= this.markers ;x++){
-            strokeWeight(1)
+            noStroke();
+            fill(0);
             textAlign(LEFT, CENTER)
-            text(int(x*this.LabelGap).toFixed(2), -40, x*-this.markerGap);
+            text(int(x*this.LabelGap).toFixed(2), -45, x*-this.markerGap);
         }
+    }
+
+    // placement of number above bar
+    /* VERTICAL SPACING: Here I want to loop through the array of objects, getting the value of sales from each object 
+    + x amount of spacing to appear above the bar. I also use the scaler function to scale the values to match the bars*/
+    // HORIZONTAL SPACING: Here I want to space them horizontally to line up above the corresponding bar 
+    barLabels(){
+        let labelSpacing = 10;
+        let labelBar = 400/fruits.length;
+        textSize(16);
+        noStroke();
+        fill(0);
+            for(let x=0; x<fruits.length; x++){
+                text(fruits[x].sales, (x*labelBar)+this.barWidth/2, this.barScaler(-fruits[x].sales)-labelSpacing);
+            }
+
     }
 
 }

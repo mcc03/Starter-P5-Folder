@@ -4,10 +4,9 @@ let fruits = [
     {name: "apple", sales:600},
     {name: "apple", sales:700},
     {name: "apple", sales:800},
-    {name: "apple", sales:1000},
-    {name: "apple", sales:300},
-    {name: "apple", sales:370},
-    {name: "apple", sales:600}
+    {name: "apple", sales:900},
+    {name: "apple", sales:1200},
+    {name: "apple", sales:1500}
 ];
 
 let charts=[];
@@ -22,7 +21,7 @@ function setup(){
     angleMode(DEGREES);
     rectMode(CORNER);
 
-    charts.push(new BarChart(400, 400, 50, 450, fruits, fruits.legth, 20, -5));
+    charts.push(new BarChart(400, 400, 50, 450, fruits, fruits.length, 10, 5, -5, 5));
 
 }
 

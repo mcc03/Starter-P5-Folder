@@ -21,7 +21,7 @@ function tidyData(){
 }
 
 function preload(){
-    table = loadTable('/classes/introToClasses/step2/data/invome.csv', 'csv', 'header');
+    table = loadTable('../step3/data/invome.csv', 'csv', 'header');
 }
 
 function setup(){

@@ -10,7 +10,6 @@ let fruits = [
 ];
 
 let charts=[];
-
 // "new" = uses classes and objects
 // let chart01 = new BarChart();
 

@@ -42,8 +42,15 @@ class BarChart{
             let scaleValue = this.height/this.highestValue
             return _scalingNum*scaleValue;
         }
-        
     }
+
+    // colour scaler
+    // colourScaler(_scalingNum){
+    //     for(let x = 0; x < fruits.length; x++){
+    //         let scaleValue = this.highestValue/x
+    //         return _scalingNum*scaleValue;
+    //     }
+    // }
 
     // draws the functions when called
     render(){
@@ -88,7 +95,7 @@ class BarChart{
     }
     
      // draw horizontal grid lines
-     vGrid(){
+    vGrid(){
         // if(this.gridCount == true){
             for(let x = 0; x <= this.numHgrid ;x++){
                 stroke(150, 5);
@@ -98,14 +105,13 @@ class BarChart{
         // }   
     }
 
-
     // draws bars
     barChart(){
         for(let x = 0; x < fruits.length; x++){
             push();
             translate(this.leftMargin + (x*this.barSpacing), 0)
             translate(10, 0);
-            fill(255);
+            fill(60, fruits[x].sales/5, 180);
             rect(0, 0,this.barWidth,this.barScaler(-fruits[x].sales));
             pop();
         }
@@ -147,4 +153,4 @@ class BarChart{
 
 }
 
-// next week: grid lines, nice labels, colours
+// next week: [grid lines], [nice labels], colours

@@ -1,33 +1,35 @@
-console.log("test2");
-let fruits = [
-    {name: "apple", sales:500},
-    {name: "apple", sales:600},
-    {name: "apple", sales:700},
-    {name: "apple", sales:800},
-    {name: "apple", sales:900},
-    {name: "apple", sales:1200},
-    {name: "apple", sales:1500}
-];
+let data;
+let userSelect = ["apples",  "oranges"];
+let colors = ["#ff4455", "#ff6455"];
 
 let charts=[];
 // "new" = uses classes and objects
 // let chart01 = new BarChart();
 
 
+function preload() {
+    data = loadTable('./data/data.csv', 'csv', 'header');
+}
+
 function setup(){
-    createCanvas(500,500);
+    createCanvas(1000,1000);
     background(200);
     angleMode(DEGREES);
     rectMode(CORNER);
+    pixelDensity(1)
+    console.log("john" + pixelDensity());
 
-    charts.push(new BarChart(400, 400, 50, 450, fruits, fruits.length, 10, 5, -5, 5));
+    charts.push(new BarChart(300, 300, 100, 450, data, data.getRowCount(), 10, 5, -5, 5));
 
 }
 
 function draw(){
+    background(200);
     charts[0].render();
 
 }
+
+// get real data data.cso.ie
 
 
 

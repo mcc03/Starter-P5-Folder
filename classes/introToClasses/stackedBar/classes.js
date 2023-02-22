@@ -1,31 +1,26 @@
-console.log("stacked bar");
+console.log("barcahrt with csv values");
+let data;
+let userSelect = ["apples", "pears", "oranges"]
+let colors = ["#ff4455", "#ff6455", "#ff6222"];
+let charts=[];
 
-function tidyData(){
-    for(let x = 0; x < table.getRowCount(); x++){
-        data.push(table.rows[x].obj);
-    }
+function preload() {
+    data = loadTable('./data/data.csv', 'csv', 'header');
 }
 
-let fruits = []
-
-let charts=[];
-// "new" = uses classes and objects
-// let chart01 = new BarChart();
-
-
 function setup(){
-    createCanvas(500,500);
-    background(200);
+    createCanvas(600,600);
+  
     angleMode(DEGREES);
     rectMode(CORNER);
 
-    charts.push(new BarChart(400, 400, 50, 450, fruits, fruits.length, 10, 5, -5, 5));
+    charts.push(new BarChart(400, 400, 100, 500, data, data.getRowCount(), 10, 5, -5, 5));
 
 }
 
 function draw(){
+    background(200);
     charts[0].render();
-
 }
 
 

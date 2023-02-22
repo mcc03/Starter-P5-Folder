@@ -11,7 +11,6 @@ class BarChart{
         this.barGap = _barGap;
         this.markerSize = _markerSize
         this.markers = _markers;
-        this.bars = fruits.length;
         this.leftMargin = 10;
         this.rightMargin = 10;
         this.numHgrid = _numHgrid
@@ -27,7 +26,14 @@ class BarChart{
         this.barSpacing = this.barWidth+this.barGap;
 
         // gets highest value from arrayName
-        this.highestValue = Math.max(...fruits.map(object => object.sales));
+        // this.highestValue = Math.max(...fruits.map(object => object.sales));
+        this.highestValue = int(this.data.rows[0].obj.total);
+
+        for(let x=0; x<this.bars -1; x++){
+            if(int(this.data.rows[x].obj.total) > this.highestValue){
+                this.highestValue = int(this.data.rows[x].obj.total);
+            }
+        }
 
         // gap between labels
         this.LabelGap = this.highestValue/this.markers;
@@ -38,37 +44,31 @@ class BarChart{
 
     // calculates how to scale bars based off the highest value
     barScaler(_scalingNum){
-        for(let x = 0; x < fruits.length; x++){
+        for(let x = 0; x < this.bars; x++){
             let scaleValue = this.height/this.highestValue
             return _scalingNum*scaleValue;
         }
     }
 
-    // colour scaler
-    // colourScaler(_scalingNum){
-    //     for(let x = 0; x < fruits.length; x++){
-    //         let scaleValue = this.highestValue/x
-    //         return _scalingNum*scaleValue;
-    //     }
-    // }
-
     // draws the functions when called
     render(){
         push();
         translate(this.posX, this.posY);
-        this.Vaxis();
-        this.Haxis();
+
         this.barChart();
+        this.vAxis();
+        this.hAxis();
         this.chartMarkers();
         this.chartLabels();
         this.hGrid();
         this.vGrid();
         this.barLabels();
+        // this.chartHorLabel();
         pop();
     }
 
     // draws vertical axis
-    Vaxis(){
+    vAxis(){
         noFill();
         strokeWeight(1);
         stroke(0);
@@ -76,7 +76,7 @@ class BarChart{
     }
 
     // draw horizontal axis
-    Haxis(){
+    hAxis(){
         noFill();
         strokeWeight(1);
         stroke(0);
@@ -107,13 +107,19 @@ class BarChart{
 
     // draws bars
     barChart(){
-        for(let x = 0; x < fruits.length; x++){
-            push();
-            translate(this.leftMargin + (x*this.barSpacing), 0)
-            translate(10, 0);
-            fill(60, fruits[x].sales/5, 180);
-            rect(0, 0,this.barWidth,this.barScaler(-fruits[x].sales));
-            pop();
+        for(let x = 0; x < this.bars; x++){
+
+                push();
+                translate(this.leftMargin + (x*this.barSpacing), 0)
+                let theColor = x % colors.length;
+                fill(colors[theColor]);
+                let prop = "total";
+                // let height = this.barScaler(int(-this.data.rows[x].obj[prop]));
+                noStroke()
+                rect(0, 0,this.barWidth,this.barScaler(int(-this.data.rows[x].obj[prop])));
+                pop();
+            
+            
         }
     }
 
@@ -131,7 +137,7 @@ class BarChart{
             noStroke();
             fill(0);
             textAlign(LEFT, CENTER)
-            text(int(x*this.LabelGap).toFixed(2), -45, x*-this.markerGap);
+            text(int(x*this.LabelGap).toFixed(2), -55, x*-this.markerGap);
         }
     }
 
@@ -140,17 +146,28 @@ class BarChart{
     + x amount of spacing to appear above the bar. I also use the scaler function to scale the values to match the bars*/
     // HORIZONTAL SPACING: Here I want to space them horizontally to line up above the corresponding bar 
     barLabels(){
-        let labelSpacing = 10;
-        let labelBar = 400/fruits.length;
         textSize(16);
         noStroke();
+        textAlign(CENTER)
+        let prop = "total";
         fill(0);
-            for(let x=0; x<fruits.length; x++){
-                text(fruits[x].sales, (x*labelBar)+this.barWidth/2, this.barScaler(-fruits[x].sales)-labelSpacing);
+            for(let x=0; x<this.bars; x++){
+                text(this.data.rows[x].obj[prop], this.barWidth+this.barSpacing*[x], this.barScaler(-this.data.rows[x].obj[prop])-10);
             }
-
     }
 
+    
+    // chartHorLabel(){
+    //     for(let x = 0; x < this.bars; x++){
+    //         push(); 
+    //         translate(0, 10) 
+    //         rotate(PI / 2); 
+    //         textAlign(LEFT, CENTER); 
+    //         text(fruits[x].name, this.barWidth+this.barSpacing*[x]-this.leftMargin, 10);
+    //         pop();
+    //     }
+
+    // }
 }
 
 // let num = 2701

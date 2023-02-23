@@ -1,6 +1,6 @@
 let data;
-let userSelect = ["apples",  "oranges"];
-let colors = ["#ff4455", "#ff6455"];
+let userSelect = ["apples",  "oranges", "bananas"];
+let colors = ["#ff4455", "#ff6455", "#ff2555"];
 
 let charts=[];
 // "new" = uses classes and objects
@@ -8,7 +8,7 @@ let charts=[];
 
 
 function preload() {
-    data = loadTable('./data/data.csv', 'csv', 'header');
+    data = loadTable('./data/data2.csv', 'csv', 'header');
 }
 
 function setup(){
@@ -19,7 +19,7 @@ function setup(){
     pixelDensity(1)
     console.log("john" + pixelDensity());
 
-    charts.push(new BarChart(300, 300, 100, 450, data, data.getRowCount(), 10, 5, -5, 5));
+    charts.push(new BarChart(400, 400, 60, 900, data, data.getRowCount(), 10, 5, -5, 5));
 
 }
 

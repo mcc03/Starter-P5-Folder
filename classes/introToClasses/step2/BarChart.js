@@ -116,7 +116,7 @@ class BarChart{
 
                 let theColor = y % colors.length;
                 fill(colors[theColor]);
-                let prop = userSelect[y];
+                let prop = "total";
                 let height = this.barScaler(int(-this.data.rows[x].obj[prop]));
                 noStroke()
                 rect(0, 0,this.barWidth,height)
@@ -157,15 +157,14 @@ class BarChart{
     + x amount of spacing to appear above the bar. I also use the scaler function to scale the values to match the bars*/
     // HORIZONTAL SPACING: Here I want to space them horizontally to line up above the corresponding bar 
     barLabels(){
-        let labelSpacing = 10;
-        //let labelBar = 400/fruits.length;
         textSize(16);
         noStroke();
+        textAlign(CENTER)
+        let prop = "total";
         fill(0);
-           // for(let x=0; x<fruits.length; x++){
-             //   text(fruits[x].sales, (x*labelBar)+this.barWidth/2, this.barScaler(-fruits[x].sales)-labelSpacing);
-           // }
-
+            for(let x=0; x<this.bars; x++){
+                text(this.data.rows[x].obj[prop], this.barWidth+this.barSpacing*[x], this.barScaler(-this.data.rows[x].obj[prop])-10);
+            }
     }
 
 }

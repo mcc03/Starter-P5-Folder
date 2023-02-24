@@ -125,8 +125,9 @@ class BarChart{
                 line(0,0,this.barWidth,0)
                 translate(0, height);
             }
+            
             pop();
-            pop()
+            pop();
         }
         
     }

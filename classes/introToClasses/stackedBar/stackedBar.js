@@ -1,4 +1,4 @@
-class BarChart{
+class StackedBar{
     // defines properties in object
     constructor(_height,_width,_posX,_posY,_data, _bars, _barGap, _markers, _markerSize, _numHgrid){
         // this object height
@@ -44,32 +44,30 @@ class BarChart{
 
     // calculates how to scale bars based off the highest value
     barScaler(_scalingNum){
-        for(let x = 0; x < this.bars; x++){
             let scaleValue = this.height/this.highestValue
             return _scalingNum*scaleValue;
-        }
     }
 
     // draws the functions when called
     render(){
         push();
         translate(this.posX, this.posY);
-
-        this.barChart();
-        this.vAxis();
-        this.hAxis();
+       
+        this.stackedChart();
         this.chartMarkers();
         this.chartLabels();
         this.hGrid();
         this.vGrid();
         this.barLabels();
+        this.Vaxis();
+        this.Haxis();
         this.xAxisNames();
         this.chartTitle();
         pop();
     }
 
     // draws vertical axis
-    vAxis(){
+    Vaxis(){
         noFill();
         strokeWeight(1);
         stroke(0);
@@ -77,7 +75,7 @@ class BarChart{
     }
 
     // draw horizontal axis
-    hAxis(){
+    Haxis(){
         noFill();
         strokeWeight(1);
         stroke(0);
@@ -88,7 +86,7 @@ class BarChart{
     hGrid(){
         // if(this.gridCount == true){
             for(let x = 0; x <= this.markers ;x++){
-                stroke(150, 5);
+                stroke(255, 5);
                 strokeWeight(2);
                 line(this.markerSize, x*-this.markerGap, this.width, x*-this.markerGap)
             }
@@ -99,7 +97,7 @@ class BarChart{
     vGrid(){
         // if(this.gridCount == true){
             for(let x = 0; x <= this.numHgrid ;x++){
-                stroke(150, 5);
+                stroke(255, 5);
                 strokeWeight(2);
                 line(x*this.width/this.numHgrid, -this.height, x*this.width/this.numHgrid, 0)
             }
@@ -107,27 +105,37 @@ class BarChart{
     }
 
     // draws bars
-    barChart(){
+    stackedChart(){
+        
         for(let x = 0; x < this.bars; x++){
+            push();
+            translate(this.leftMargin + (x*this.barSpacing), 0)
+            
+            push();
+            for(let y =0; y < userSelect.length; y++){
 
-                push();
-                translate(this.leftMargin + (x*this.barSpacing), 0)
-                let theColor = x % colors.length;
+                let theColor = y % colors.length;
                 fill(colors[theColor]);
-                let prop = "total";
+                let prop = userSelect[y];
                 let height = this.barScaler(int(-this.data.rows[x].obj[prop]));
                 noStroke()
-                rect(0, 0,this.barWidth, height);
-                pop();
-            
-            
+                rect(0, 0,this.barWidth,height)
+                noFill()
+                stroke(240)
+                line(0,0,this.barWidth,0)
+                translate(0, height);
+            }
+            pop();
+            pop();
         }
+        
     }
 
     // draws marks on Vaxis
     chartMarkers(){
         for(let x = 0; x <= this.markers ;x++){
-            strokeWeight(2);
+            stroke(15)
+            strokeWeight(1);
             line(this.markerSize, x*-this.markerGap, 0, x*-this.markerGap)
     }
 }
@@ -137,8 +145,9 @@ class BarChart{
         for(let x = 0; x <= this.markers ;x++){
             noStroke();
             fill(0);
-            textAlign(LEFT, CENTER)
-            text(int(x*this.LabelGap).toFixed(2), -55, x*-this.markerGap);
+            textSize(11)
+            textAlign(RIGHT, CENTER)
+            text(int(x*this.LabelGap).toFixed(2), -10, x*-this.markerGap);
         }
     }
 
@@ -160,7 +169,6 @@ class BarChart{
             }
     }
 
-    // draws labels for the x-axis
     xAxisNames(){
         for(let x = 0; x < this.bars; x++){
             push();
@@ -170,12 +178,12 @@ class BarChart{
             pop();
         }
     }
-    
+
     chartTitle(){
         let titleMargin = (this.height*-1)-40
         textAlign(CENTER);
         textStyle(BOLD);
-        text("normal bar chart".toUpperCase(), this.width/2, titleMargin);
+        text("stacked bar chart".toUpperCase(), this.width/2, titleMargin);
     }
 
 }

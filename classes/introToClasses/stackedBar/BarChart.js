@@ -1,6 +1,6 @@
 class BarChart{
     // defines properties in object
-    constructor(_height,_width,_posX,_posY,_data, _bars, _barGap, _markers, _markerSize, _numHgrid){
+    constructor(_height,_width,_posX,_posY,_data, _bars, _barGap, _markers, _markerSize, _hGridLines, _vGridLines){
         // this object height
         this.height = _height;
         this.width = _width;
@@ -13,7 +13,8 @@ class BarChart{
         this.markers = _markers;
         this.leftMargin = 10;
         this.rightMargin = 10;
-        this.numHgrid = _numHgrid
+        this.hGridLines = _hGridLines;
+        this.vGridLines = _vGridLines;
         // this.gridCount = _gridCount;
 
         // gap between markers
@@ -35,6 +36,10 @@ class BarChart{
             }
         }
 
+        // for(let x = 0; x<this.bars;x++){
+        //     this.masterBarGap = (x * this.barWidth) + (x * this.barGap) + this.leftMargin;
+        // }
+
         // gap between labels
         this.LabelGap = this.highestValue/this.markers;
 
@@ -50,21 +55,31 @@ class BarChart{
         }
     }
 
+    capitalFirst(str){
+    return str
+        .toLowerCase()
+        .split(' ')
+        .map((word) => word.charAt(0).toUpperCase() + word.slice(1))
+        .join(' ');
+    }
+
     // draws the functions when called
     render(){
         push();
         translate(this.posX, this.posY);
 
-        this.barChart();
-        this.vAxis();
-        this.hAxis();
-        this.chartMarkers();
-        this.chartLabels();
         this.hGrid();
         this.vGrid();
+        this.vAxis();
+        this.hAxis();
+        this.barChart();
+        this.chartMarkers();
+        this.chartLabels();
         this.barLabels();
         this.xAxisNames();
         this.chartTitle();
+        this.legend();
+
         pop();
     }
 
@@ -87,21 +102,21 @@ class BarChart{
     // draw horizontal grid lines
     hGrid(){
         // if(this.gridCount == true){
-            for(let x = 0; x <= this.markers ;x++){
-                stroke(150, 5);
+            for(let x = 1; x <= this.hGridLines ;x++){
+                stroke(150, 70);
                 strokeWeight(2);
                 line(this.markerSize, x*-this.markerGap, this.width, x*-this.markerGap)
             }
         // }   
     }
     
-     // draw horizontal grid lines
+     // draw vertical grid lines
     vGrid(){
         // if(this.gridCount == true){
-            for(let x = 0; x <= this.numHgrid ;x++){
-                stroke(150, 5);
+            for(let x = 1; x <= this.vGridLines ;x++){
+                stroke(255);
                 strokeWeight(2);
-                line(x*this.width/this.numHgrid, -this.height, x*this.width/this.numHgrid, 0)
+                line(x*this.width/this.vGridLines, -this.height, x*this.width/this.vGridLines, 0)
             }
         // }   
     }
@@ -132,13 +147,20 @@ class BarChart{
     }
 }
 
+// let num = 2701
+// for(let x = num; x %(mod) 7 ==0; x++){
+// roundMaxNum = x; 
+// }
+
     // draws labels on the vertical axis
     chartLabels(){
+
         for(let x = 0; x <= this.markers ;x++){
             noStroke();
             fill(0);
-            textAlign(LEFT, CENTER)
-            text(int(x*this.LabelGap).toFixed(2), -55, x*-this.markerGap);
+            textSize(14);
+            textAlign(RIGHT, CENTER)
+            text(int(x*this.LabelGap).toFixed(2), -10, x*-this.markerGap);
         }
     }
 
@@ -149,12 +171,14 @@ class BarChart{
     barLabels(){
         textSize(16);
         noStroke();
-        textAlign(LEFT, CENTER)
+        textStyle(BOLD);
+        textAlign(CENTER)
         let prop = "total";
         fill(0);
-            for(let x=0; x<this.bars; x++){
+            for(let x=0; x < this.bars; x++){
                 push();
-                translate(this.leftMargin + (x*this.barSpacing), 0);
+                this.masterBarGap = (x * this.barWidth) + (x * this.barGap) + this.leftMargin;
+                translate(this.masterBarGap + this.barWidth / 2, 0)
                 text(this.data.rows[x].obj[prop], 0, this.barScaler(-this.data.rows[x].obj[prop])-10);
                 pop();
             }
@@ -164,18 +188,33 @@ class BarChart{
     xAxisNames(){
         for(let x = 0; x < this.bars; x++){
             push();
-            translate(this.barGap + (x*this.barSpacing), 0)
-            textAlign(LEFT); 
+            this.masterBarGap = (x * this.barWidth) + (x * this.barGap) + this.leftMargin;
+            translate(this.masterBarGap + this.barWidth / 2, 10)
+            textStyle(NORMAL);
+            textAlign(LEFT);
+            rotate(90); 
             text(this.data.rows[x].obj.month, 0, 10);
             pop();
         }
     }
     
+    // draws chart title
     chartTitle(){
         let titleMargin = (this.height*-1)-40
         textAlign(CENTER);
         textStyle(BOLD);
-        text("normal bar chart".toUpperCase(), this.width/2, titleMargin);
+        text("bar chart".toUpperCase(), this.width/2, titleMargin);
+    }
+
+    // draws legends
+    legend(){
+        for(let x = 1; x <= 3; x++){
+            textAlign(LEFT);
+            textStyle(BOLD);
+            text(data.columns[x].toUpperCase(), this.width, -this.height+(x*-20));
+            rect(this.width/2, -this.height+(x*-20), 0, -this.height+(x*-20));
+        }
+
     }
 
 }

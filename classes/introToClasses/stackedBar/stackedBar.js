@@ -1,6 +1,6 @@
 class StackedBar{
     // defines properties in object
-    constructor(_height,_width,_posX,_posY,_data, _bars, _barGap, _markers, _markerSize, _numHgrid){
+    constructor(_height,_width,_posX,_posY,_data, _bars, _barGap, _markers, _markerSize, _hGridLines, _vGridLines) {
         // this object height
         this.height = _height;
         this.width = _width;
@@ -13,7 +13,8 @@ class StackedBar{
         this.markers = _markers;
         this.leftMargin = 10;
         this.rightMargin = 10;
-        this.numHgrid = _numHgrid
+        this.hGridLines = _hGridLines;
+        this.vGridLines = _vGridLines;
         // this.gridCount = _gridCount;
 
         // gap between markers
@@ -53,21 +54,21 @@ class StackedBar{
         push();
         translate(this.posX, this.posY);
        
+        this.hGrid();
+        this.vGrid();
         this.stackedChart();
         this.chartMarkers();
         this.chartLabels();
-        this.hGrid();
-        this.vGrid();
         this.barLabels();
-        this.Vaxis();
-        this.Haxis();
+        this.vAxis();
+        this.hAxis();
         this.xAxisNames();
         this.chartTitle();
         pop();
     }
 
     // draws vertical axis
-    Vaxis(){
+    vAxis(){
         noFill();
         strokeWeight(1);
         stroke(0);
@@ -75,7 +76,7 @@ class StackedBar{
     }
 
     // draw horizontal axis
-    Haxis(){
+    hAxis(){
         noFill();
         strokeWeight(1);
         stroke(0);
@@ -85,8 +86,8 @@ class StackedBar{
     // draw horizontal grid lines
     hGrid(){
         // if(this.gridCount == true){
-            for(let x = 0; x <= this.markers ;x++){
-                stroke(255, 5);
+            for(let x = 1; x <= this.hGridLines ;x++){
+                stroke(150, 70);
                 strokeWeight(2);
                 line(this.markerSize, x*-this.markerGap, this.width, x*-this.markerGap)
             }
@@ -96,10 +97,10 @@ class StackedBar{
      // draw horizontal grid lines
     vGrid(){
         // if(this.gridCount == true){
-            for(let x = 0; x <= this.numHgrid ;x++){
-                stroke(255, 5);
-                strokeWeight(2);
-                line(x*this.width/this.numHgrid, -this.height, x*this.width/this.numHgrid, 0)
+            for(let x = 1; x <= this.vGridLines ;x++){
+                stroke(255);
+                strokeWeight(1);
+                line(x*this.width/this.vGridLines, -this.height, x*this.width/this.vGridLines, 0)
             }
         // }   
     }
@@ -109,19 +110,21 @@ class StackedBar{
         
         for(let x = 0; x < this.bars; x++){
             push();
+            // spacing of bars
             translate(this.leftMargin + (x*this.barSpacing), 0)
-            
+
             push();
+            // specified columns of data
             for(let y =0; y < userSelect.length; y++){
 
                 let theColor = y % colors.length;
                 fill(colors[theColor]);
                 let prop = userSelect[y];
                 let height = this.barScaler(int(-this.data.rows[x].obj[prop]));
-                noStroke()
+                noStroke();
                 rect(0, 0,this.barWidth,height)
-                noFill()
-                stroke(240)
+                noFill();
+                stroke(240);
                 line(0,0,this.barWidth,0)
                 translate(0, height);
             }
@@ -134,7 +137,7 @@ class StackedBar{
     // draws marks on Vaxis
     chartMarkers(){
         for(let x = 0; x <= this.markers ;x++){
-            stroke(15)
+            stroke(0);
             strokeWeight(1);
             line(this.markerSize, x*-this.markerGap, 0, x*-this.markerGap)
     }
@@ -145,7 +148,7 @@ class StackedBar{
         for(let x = 0; x <= this.markers ;x++){
             noStroke();
             fill(0);
-            textSize(11)
+            textSize(12);
             textAlign(RIGHT, CENTER)
             text(int(x*this.LabelGap).toFixed(2), -10, x*-this.markerGap);
         }
@@ -158,12 +161,13 @@ class StackedBar{
     barLabels(){
         textSize(16);
         noStroke();
-        textAlign(LEFT, CENTER)
+        textAlign(CENTER)
         let prop = "total";
         fill(0);
             for(let x=0; x<this.bars; x++){
                 push();
-                translate(this.leftMargin + (x*this.barSpacing), 0);
+                this.masterBarGap = (x * this.barWidth) + (x * this.barGap) + this.leftMargin;
+                translate(this.masterBarGap + this.barWidth / 2, 0)
                 text(this.data.rows[x].obj[prop], 0, this.barScaler(-this.data.rows[x].obj[prop])-10);
                 pop();
             }
@@ -172,8 +176,11 @@ class StackedBar{
     xAxisNames(){
         for(let x = 0; x < this.bars; x++){
             push();
-            translate(this.barGap + (x*this.barSpacing), 0)
-            textAlign(LEFT); 
+            this.masterBarGap = (x * this.barWidth) + (x * this.barGap) + this.leftMargin;
+            translate(this.masterBarGap + this.barWidth / 2, 10)
+            textStyle(NORMAL);
+            textAlign(LEFT);
+            rotate(90); 
             text(this.data.rows[x].obj.month, 0, 10);
             pop();
         }

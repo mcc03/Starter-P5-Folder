@@ -28,18 +28,18 @@ class StackedBar{
 
         // gets highest value from arrayName
         // this.highestValue = Math.max(...fruits.map(object => object.sales));
-        this.highestValue = int(this.data.rows[0].obj.total);
+        this.highestValue = int(this.data.rows[0].obj.TOTAL);
 
         for(let x=0; x<this.bars -1; x++){
-            if(int(this.data.rows[x].obj.total) > this.highestValue){
-                this.highestValue = int(this.data.rows[x].obj.total);
+            if(int(this.data.rows[x].obj.TOTAL) > this.highestValue){
+                this.highestValue = int(this.data.rows[x].obj.TOTAL);
             }
         }
 
         // gap between labels
         this.LabelGap = this.highestValue/this.markers;
 
-        console.log("highest value is:", this.highestValue)
+        console.log("stacked highest value is:", this.highestValue)
         console.log("barWidth:", this.barWidth);
     }
 
@@ -180,8 +180,8 @@ class StackedBar{
             translate(this.masterBarGap + this.barWidth / 2, 10)
             textStyle(NORMAL);
             textAlign(LEFT);
-            rotate(90); 
-            text(this.data.rows[x].obj.month, 0, 10);
+            rotate(30); 
+            text(this.data.rows[x].obj.County_of_residence2, 0, 10);
             pop();
         }
     }
@@ -190,7 +190,7 @@ class StackedBar{
         let titleMargin = (this.height*-1)-40
         textAlign(CENTER);
         textStyle(BOLD);
-        text("stacked bar chart".toUpperCase(), this.width/2, titleMargin);
+        text("travel time of students 19 years or over".toUpperCase(), this.width/2, titleMargin);
     }
 
 }

@@ -28,11 +28,11 @@ class BarChart{
 
         // gets highest value from arrayName
         // this.highestValue = Math.max(...fruits.map(object => object.sales));
-        this.highestValue = int(this.data.rows[0].obj.total);
+        this.highestValue = int(this.data.rows[0].obj.VALUE_M);
 
         for(let x=0; x<this.bars -1; x++){
-            if(int(this.data.rows[x].obj.total) > this.highestValue){
-                this.highestValue = int(this.data.rows[x].obj.total);
+            if(int(this.data.rows[x].obj.VALUE_M) > this.highestValue){
+                this.highestValue = int(this.data.rows[x].obj.VALUE_M);
             }
         }
 
@@ -55,13 +55,13 @@ class BarChart{
         }
     }
 
-    capitalFirst(str){
-    return str
-        .toLowerCase()
-        .split(' ')
-        .map((word) => word.charAt(0).toUpperCase() + word.slice(1))
-        .join(' ');
-    }
+    // capitalFirst(str){
+    // return str
+    //     .toLowerCase()
+    //     .split(' ')
+    //     .map((word) => word.charAt(0).toUpperCase() + word.slice(1))
+    //     .join(' ');
+    // }
 
     // draws the functions when called
     render(){
@@ -129,10 +129,18 @@ class BarChart{
                 translate(this.leftMargin + (x*this.barSpacing), 0)
                 let theColor = x % colors.length;
                 fill(colors[theColor]);
-                let prop = "total";
+                let prop = 'VALUE_M';
                 let height = this.barScaler(int(-this.data.rows[x].obj[prop]));
+                
+                // console.log(this.data.getRowCount())
+               
+                let prop2 = 'VALUE_F';
+                let height2 = this.barScaler(int(-this.data.rows[x].obj[prop2]));
+                // console.log(height)
                 noStroke()
                 rect(0, 0,this.barWidth, height);
+                // rect(0, 0,this.barWidth, height2);
+
                 pop();
             
             
@@ -173,7 +181,7 @@ class BarChart{
         noStroke();
         textStyle(BOLD);
         textAlign(CENTER)
-        let prop = "total";
+        let prop = "VALUE_M";
         fill(0);
             for(let x=0; x < this.bars; x++){
                 push();
@@ -193,7 +201,7 @@ class BarChart{
             textStyle(NORMAL);
             textAlign(LEFT);
             rotate(90); 
-            text(this.data.rows[x].obj.month, 0, 10);
+            text(this.data.rows[x].obj.County_of_residence, 0, 10);
             pop();
         }
     }
@@ -203,7 +211,7 @@ class BarChart{
         let titleMargin = (this.height*-1)-40
         textAlign(CENTER);
         textStyle(BOLD);
-        text("bar chart".toUpperCase(), this.width/2, titleMargin);
+        text("travel time of pop. aged 15 or older at work (male)".toUpperCase(), this.width/2, titleMargin);
     }
 
     // draws legends
@@ -211,7 +219,7 @@ class BarChart{
         for(let x = 1; x <= 3; x++){
             textAlign(LEFT);
             textStyle(BOLD);
-            text(data.columns[x].toUpperCase(), this.width, -this.height+(x*-20));
+            // text(data.columns[x].toUpperCase(), this.width, -this.height+(x*-20));
             rect(this.width/2, -this.height+(x*-20), 0, -this.height+(x*-20));
         }
 

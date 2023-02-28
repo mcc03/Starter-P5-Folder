@@ -28,11 +28,11 @@ class HBarChart{
 
     // gets highest value from arrayName
     // this.highestValue = Math.max(...fruits.map(object => object.sales));
-    this.highestValue = int(this.data.rows[0].obj.total);
+    this.highestValue = int(this.data.rows[0].obj.VALUE_F);
 
     for(let x=0; x<this.bars -1; x++){
-        if(int(this.data.rows[x].obj.total) > this.highestValue){
-            this.highestValue = int(this.data.rows[x].obj.total);
+        if(int(this.data.rows[x].obj.VALUE_F) > this.highestValue){
+            this.highestValue = int(this.data.rows[x].obj.VALUE_F);
         }
     }
 
@@ -80,21 +80,27 @@ class HBarChart{
     // draws bar chart
     sidewaysBarChart(){
 
+        let numbers = [];
+       
         for(let x = 0; x < this.bars; x++){
-                
-        // let numbers = [this.data.rows[x].obj.total];
-        // numbers.sort(function(a, b){
-        //     if(a < b) return 1;
-        //     if(a > b) return -1;
-        //     return 0;
-        // });
+        // let numbers = [this.data.rows[x].obj.VALUE_F];
+        
+            numbers.push(int(this.data.rows[x].obj.VALUE_F))
+        }
+        // console.log(numbers);
+       
+        numbers.sort(function(a, b){
+           return a-b;
+            
+        });
+        // console.log(numbers);
 
-        // console.log(numbers)
+        for(let x = 0; x < this.bars; x++){
             push();
             translate(0, this.topMargin + (x*this.barSpacing))
             let theColor = x % colors.length;
             fill(colors[theColor]);
-            let prop = "total";
+            let prop = "VALUE_F";
             let height = -this.barScaler(int(-this.data.rows[x].obj[prop]));
             noStroke()
             rect(0, 0, height, this.barWidth);
@@ -147,7 +153,7 @@ class HBarChart{
         textSize(16);
         noStroke();
         textAlign(CENTER);
-        let prop = "total";
+        let prop = "VALUE_F";
         
         fill(0);
             for(let x=0; x < this.bars; x++){
@@ -168,7 +174,7 @@ class HBarChart{
             translate(0, this.topMargin + (x*this.barSpacing))
             textStyle(NORMAL);
             textAlign(RIGHT, CENTER); 
-            text(this.data.rows[x].obj.month, -5, this.barWidth/2);
+            text(this.data.rows[x].obj.County_of_residence, -5, this.barWidth/2);
             pop();
         }
     }
@@ -200,7 +206,7 @@ class HBarChart{
         let titleMargin = -10;
         textAlign(CENTER);
         textStyle(BOLD);
-        text("horizontal bar chart".toUpperCase(), this.height/2, titleMargin);
+        text("travel time of pop. aged 15 or older at work (female)".toUpperCase(), this.height/2, titleMargin);
     }
 }
 

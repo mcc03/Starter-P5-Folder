@@ -201,7 +201,8 @@ class BarChart{
             textStyle(NORMAL);
             textAlign(LEFT);
             rotate(90); 
-            text(this.data.rows[x].obj.County_of_residence, 0, 10);
+            let prop = "County_of_residence"
+            text(this.data.rows[x].obj[prop], 0, 0);
             pop();
         }
     }

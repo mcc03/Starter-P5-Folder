@@ -1,0 +1,8 @@
+Gender,County_of_residence,At_work_school_or_college,VALUE_M,VALUE_F,MAX_VAL_BAR,,,County_of_residence2,At_work_school_or_college2,VALUE_M2,VALUE_F2,AVG,AVG_R,TOTALS,MAX_S
+Male,Dublin City,Population aged 15 years and over at work,8168,7887,8168,,,Dublin City,Students at school or college aged 19 years and over,1228,1438,1333,1333,2666,2666
+Male,Wexford,Population aged 15 years and over at work,2424,1103,,,,Wexford,Students at school or college aged 19 years and over,217,220,218.5,219,437,
+Male,Wicklow,Population aged 15 years and over at work,5169,3326,,,,Wicklow,Students at school or college aged 19 years and over,657,634,645.5,646,1291,
+Male,Cork County,Population aged 15 years and over at work,6133,4082,,,,Cork County,Students at school or college aged 19 years and over,905,902,903.5,904,1807,
+Male,Galway County,Population aged 15 years and over at work,3207,2319,,,,Galway County,Students at school or college aged 19 years and over,377,406,391.5,392,783,
+Male,Mayo,Population aged 15 years and over at work,1696,989,,,,Mayo,Students at school or college aged 19 years and over,152,145,148.5,149,297,
+Male,Sligo,Population aged 15 years and over at work,509,261,,,,Sligo,Students at school or college aged 19 years and over,33,33,33,33,66,

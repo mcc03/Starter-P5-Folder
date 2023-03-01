@@ -28,11 +28,11 @@ class StackedBar{
 
         // gets highest value from arrayName
         // this.highestValue = Math.max(...fruits.map(object => object.sales));
-        this.highestValue = int(this.data.rows[0].obj.TOTAL);
+        this.highestValue = int(this.data.rows[0].obj.MAX_S);
 
         for(let x=0; x<this.bars -1; x++){
-            if(int(this.data.rows[x].obj.TOTAL) > this.highestValue){
-                this.highestValue = int(this.data.rows[x].obj.TOTAL);
+            if(int(this.data.rows[x].obj.MAX_S) > this.highestValue){
+                this.highestValue = int(this.data.rows[x].obj.MAX_S);
             }
         }
 
@@ -53,7 +53,6 @@ class StackedBar{
     render(){
         push();
         translate(this.posX, this.posY);
-       
         this.hGrid();
         this.vGrid();
         this.stackedChart();
@@ -64,21 +63,19 @@ class StackedBar{
         this.hAxis();
         this.xAxisNames();
         this.chartTitle();
+        this.trendLine();
+        // this.avgLine();
         pop();
     }
 
     // draws vertical axis
     vAxis(){
-        noFill();
-        strokeWeight(1);
         stroke(0);
         line(0,0,0,-this.height)
     }
 
     // draw horizontal axis
     hAxis(){
-        noFill();
-        strokeWeight(1);
         stroke(0);
         line(0,0,this.width,0)
     }
@@ -116,16 +113,15 @@ class StackedBar{
             push();
             // specified columns of data
             for(let y =0; y < userSelect.length; y++){
-
                 let theColor = y % colors.length;
                 fill(colors[theColor]);
                 let prop = userSelect[y];
                 let height = this.barScaler(int(-this.data.rows[x].obj[prop]));
                 noStroke();
-                rect(0, 0,this.barWidth,height)
+                rect(0, 0,this.barWidth,height);
                 noFill();
                 stroke(240);
-                line(0,0,this.barWidth,0)
+                line(0,0,this.barWidth,0);
                 translate(0, height);
             }
             pop();
@@ -133,6 +129,43 @@ class StackedBar{
         }
         
     }
+
+    trendLine() {
+
+        for(let x = 0; x < this.bars; x++){
+            push();
+
+            // spacing
+            translate(this.leftMargin + (x*this.barSpacing), 0)
+            let prop = "AVG_R";
+            let circleAVG = this.barScaler(int(-this.data.rows[x].obj[prop]))
+            fill(255);
+            stroke(255);
+            strokeWeight(2);
+            // line(this.barWidth, 0,this.barWidth/2, line2);
+            circle(this.barWidth/2, circleAVG, 10);
+            strokeWeight(4);
+            line(this.barWidth/2, circleAVG, 50*2, this.barScaler(int(this.data.rows[x].obj[prop])));
+            pop();
+        }
+    }
+
+    // avgLine() {
+    //     for(let x = 0; x < this.bars; x++){
+    //         push();
+
+    //         // spacing
+    //         translate(this.leftMargin + (x*this.barSpacing), 0)
+    //         let prop = "AVG_R";
+    //         let circleAVG = this.barScaler(int(-this.data.rows[x].obj[prop]))
+            
+    //         fill(255);
+    //         stroke(255);
+    //         strokeWeight(4);
+    //         line(this.barWidth/2, circleAVG, 0, circleAVG);
+    //         pop();
+    //     }
+    // }
 
     // draws marks on Vaxis
     chartMarkers(){
@@ -160,9 +193,10 @@ class StackedBar{
     // HORIZONTAL SPACING: Here I want to space them horizontally to line up above the corresponding bar 
     barLabels(){
         textSize(16);
+        textStyle(BOLD);
         noStroke();
         textAlign(CENTER)
-        let prop = "total";
+        let prop = "TOTALS";
         fill(0);
             for(let x=0; x<this.bars; x++){
                 push();
@@ -180,6 +214,7 @@ class StackedBar{
             translate(this.masterBarGap + this.barWidth / 2, 10)
             textStyle(NORMAL);
             textAlign(LEFT);
+            noStroke();
             rotate(30); 
             text(this.data.rows[x].obj.County_of_residence2, 0, 10);
             pop();
@@ -188,9 +223,11 @@ class StackedBar{
 
     chartTitle(){
         let titleMargin = (this.height*-1)-40
+        noStroke();
         textAlign(CENTER);
         textStyle(BOLD);
-        text("travel time of students 19 years or over".toUpperCase(), this.width/2, titleMargin);
+        let prop = 'At_work_school_or_college2'
+        text(this.data.rows[0].obj[prop].toUpperCase(), this.width/2, titleMargin);
     }
 
 }

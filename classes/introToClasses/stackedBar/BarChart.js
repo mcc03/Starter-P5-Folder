@@ -28,11 +28,11 @@ class BarChart{
 
         // gets highest value from arrayName
         // this.highestValue = Math.max(...fruits.map(object => object.sales));
-        this.highestValue = int(this.data.rows[0].obj.VALUE_M);
+        this.highestValue = int(this.data.rows[0].obj.MAX_VAL_BAR);
 
         for(let x=0; x<this.bars -1; x++){
-            if(int(this.data.rows[x].obj.VALUE_M) > this.highestValue){
-                this.highestValue = int(this.data.rows[x].obj.VALUE_M);
+            if(int(this.data.rows[x].obj.MAX_VAL_BAR) > this.highestValue){
+                this.highestValue = int(this.data.rows[x].obj.MAX_VAL_BAR);
             }
         }
 
@@ -43,7 +43,7 @@ class BarChart{
         // gap between labels
         this.LabelGap = this.highestValue/this.markers;
 
-        console.log("highest value is:", this.highestValue)
+        console.log("highest value for normal barchart is:", this.highestValue)
         console.log("barWidth:", this.barWidth);
     }
 
@@ -75,7 +75,7 @@ class BarChart{
         this.barChart();
         this.chartMarkers();
         this.chartLabels();
-        this.barLabels();
+        // this.barLabels();
         this.xAxisNames();
         this.chartTitle();
         this.legend();
@@ -124,26 +124,25 @@ class BarChart{
     // draws bars
     barChart(){
         for(let x = 0; x < this.bars; x++){
+            push();
+            // spacing of bars
+            translate(this.leftMargin + (x*this.barSpacing), 0)
 
-                push();
-                translate(this.leftMargin + (x*this.barSpacing), 0)
-                let theColor = x % colors.length;
+            push();
+            // specified data
+            for(let y =0; y < barChartSelect.length; y++){
+                // colors
+                let theColor = y % colors.length;
                 fill(colors[theColor]);
-                let prop = 'VALUE_M';
-                let height = this.barScaler(int(-this.data.rows[x].obj[prop]));
                 
-                // console.log(this.data.getRowCount())
-               
-                let prop2 = 'VALUE_F';
-                let height2 = this.barScaler(int(-this.data.rows[x].obj[prop2]));
-                // console.log(height)
-                noStroke()
-                rect(0, 0,this.barWidth, height);
-                // rect(0, 0,this.barWidth, height2);
-
-                pop();
-            
-            
+                let prop = barChartSelect[y];
+                let height = this.barScaler(int(-this.data.rows[x].obj[prop]));
+                noStroke();
+                rect(0, 0,this.barWidth/2,height);
+                translate(this.barWidth/2, 0);
+            }
+            pop();
+            pop();
         }
     }
 
@@ -197,12 +196,13 @@ class BarChart{
         for(let x = 0; x < this.bars; x++){
             push();
             this.masterBarGap = (x * this.barWidth) + (x * this.barGap) + this.leftMargin;
-            translate(this.masterBarGap + this.barWidth / 2, 10)
+            translate(this.masterBarGap + this.barWidth/2, 10)
             textStyle(NORMAL);
+            textSize(16);
             textAlign(LEFT);
-            rotate(90); 
+            rotate(30); 
             let prop = "County_of_residence"
-            text(this.data.rows[x].obj[prop], 0, 0);
+            text(this.data.rows[x].obj[prop], 0, 10);
             pop();
         }
     }
@@ -212,7 +212,8 @@ class BarChart{
         let titleMargin = (this.height*-1)-40
         textAlign(CENTER);
         textStyle(BOLD);
-        text("travel time of pop. aged 15 or older at work (male)".toUpperCase(), this.width/2, titleMargin);
+        let prop = 'At_work_school_or_college'
+        text(this.data.rows[0].obj[prop].toUpperCase(), this.width/2, titleMargin);
     }
 
     // draws legends

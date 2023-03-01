@@ -1,11 +1,14 @@
 console.log("barcahrt with csv values");
 let data;
-let userSelect = ["VALUE_M2", "VALUE_F2"]
+let stacked;
+let barChartSelect = ["VALUE_M", "VALUE_F"];
+let userSelect = ["VALUE_M2", "VALUE_F2"];
 let colors = ["#252525", "#FF0000", "#AF0404"];
 let charts=[];
 
 function preload() {
-    data = loadTable('./data/travel_time2016.csv', 'csv', 'header');
+    data = loadTable('./data/travel_time2016fix.csv', 'csv', 'header');
+    barData = loadTable('./data/stacked_travel2016.csv', 'csv', 'header');
 }
 
 function setup(){

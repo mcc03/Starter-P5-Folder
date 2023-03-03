@@ -142,7 +142,6 @@ class StackedBar{
             fill(255);
             stroke(255);
             strokeWeight(2);
-            // line(this.barWidth, 0,this.barWidth/2, line2);
             circle(this.barWidth/2, circleAVG, 10);
             strokeWeight(4);
             line(this.barWidth/2, circleAVG, 50*2, this.barScaler(int(this.data.rows[x].obj[prop])));

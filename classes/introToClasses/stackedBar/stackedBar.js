@@ -1,13 +1,29 @@
 class StackedBar{
     // defines properties in object
-    constructor(_height,_width,_posX,_posY,_data, _bars, _barGap, _markers, _markerSize, _hGridLines, _vGridLines) {
+    constructor({
+        _height=400,
+        _width=400,
+        _posX=100,
+        _posY=900,
+        _xName,
+        _chartValue,
+        _data,
+        _barGap=10, 
+        _markers=5, 
+        _markerSize=-5, 
+        _hGridLines=5, 
+        _vGridLines=0
+    }
+        ){
         // this object height
         this.height = _height;
         this.width = _width;
         this.posX = _posX;
         this.posY = _posY;
         this.data = _data;
-        this.bars = _bars;
+        this.xName = _xName;
+        this.chartValue = _chartValue;
+         // this.maxValue = "TOTALS";
         this.barGap = _barGap;
         this.markerSize = _markerSize
         this.markers = _markers;
@@ -21,20 +37,20 @@ class StackedBar{
         this.markerGap = this.height/this.markers;
 
         // calculates bar width
-        this.barWidth = (this.width - (this.leftMargin + this.rightMargin) - ((this.bars - 1)* this.barGap))/this.bars;
+        this.barWidth = (this.width - (this.leftMargin + this.rightMargin) - ((this.data.getRowCount() - 1)* this.barGap))/this.data.getRowCount();
 
         // calculates bar spacing
         this.barSpacing = this.barWidth+this.barGap;
 
         // gets highest value from arrayName
         // this.highestValue = Math.max(...fruits.map(object => object.sales));
-        this.highestValue = int(this.data.rows[0].obj.MAX_S);
+        // this.highestValue = int(this.data.rows[0].obj.MAX_S);
 
-        for(let x=0; x<this.bars -1; x++){
-            if(int(this.data.rows[x].obj.MAX_S) > this.highestValue){
-                this.highestValue = int(this.data.rows[x].obj.MAX_S);
-            }
-        }
+        // for(let x=0; x<this.bars -1; x++){
+        //     if(int(this.data.rows[x].obj.MAX_S) > this.highestValue){
+        //         this.highestValue = int(this.data.rows[x].obj.MAX_S);
+        //     }
+        // }
 
         // gap between labels
         this.LabelGap = this.highestValue/this.markers;
@@ -43,9 +59,20 @@ class StackedBar{
         console.log("barWidth:", this.barWidth);
     }
 
+    highestValue(){
+        let maxValue = 0;
+        for(let x=0; x < this.data.getRowCount(); x++){
+            
+            if (int(data.rows[x].obj.TOTALS) > maxValue){
+                maxValue = int(data.rows[x].obj.TOTALS);
+            }
+        }
+        return maxValue;
+    }
+
     // calculates how to scale bars based off the highest value
     barScaler(_scalingNum){
-            let scaleValue = this.height/this.highestValue
+            let scaleValue = this.height/this.highestValue();
             return _scalingNum*scaleValue;
     }
 
@@ -105,18 +132,17 @@ class StackedBar{
     // draws bars
     stackedChart(){
         
-        for(let x = 0; x < this.bars; x++){
+        for(let x = 0; x < this.data.getRowCount(); x++){
             push();
             // spacing of bars
             translate(this.leftMargin + (x*this.barSpacing), 0)
 
             push();
             // specified columns of data
-            for(let y =0; y < userSelect.length; y++){
+            for(let y =0; y < this.chartValue.length; y++){
                 let theColor = y % colors.length;
                 fill(colors[theColor]);
-                let prop = userSelect[y];
-                let height = this.barScaler(int(-this.data.rows[x].obj[prop]));
+                let height = this.barScaler(int(-this.data.rows[x].obj[this.chartValue[y]]));
                 noStroke();
                 rect(0, 0,this.barWidth,height);
                 noFill();
@@ -132,7 +158,7 @@ class StackedBar{
 
     trendLine() {
 
-        for(let x = 0; x < this.bars; x++){
+        for(let x = 0; x < this.data.getRowCount(); x++){
             push();
 
             // spacing
@@ -178,11 +204,12 @@ class StackedBar{
     // draws labels on the vertical axis
     chartLabels(){
         for(let x = 0; x <= this.markers ;x++){
+            let labelValues = this.highestValue()/this.markers;
             noStroke();
             fill(0);
             textSize(12);
             textAlign(RIGHT, CENTER)
-            text(int(x*this.LabelGap).toFixed(2), -10, x*-this.markerGap);
+            text(int(x*labelValues).toFixed(0), -10, x*-this.markerGap);
         }
     }
 
@@ -197,7 +224,7 @@ class StackedBar{
         textAlign(CENTER)
         let prop = "TOTALS";
         fill(0);
-            for(let x=0; x<this.bars; x++){
+            for(let x=0; x<this.data.getRowCount(); x++){
                 push();
                 this.masterBarGap = (x * this.barWidth) + (x * this.barGap) + this.leftMargin;
                 translate(this.masterBarGap + this.barWidth / 2, 0)
@@ -207,7 +234,8 @@ class StackedBar{
     }
 
     xAxisNames(){
-        for(let x = 0; x < this.bars; x++){
+        let xAxisLabels = data.getColumn(this.xName);
+        for(let x = 0; x < this.data.getRowCount(); x++){
             push();
             this.masterBarGap = (x * this.barWidth) + (x * this.barGap) + this.leftMargin;
             translate(this.masterBarGap + this.barWidth / 2, 10)
@@ -215,7 +243,8 @@ class StackedBar{
             textAlign(LEFT);
             noStroke();
             rotate(30); 
-            text(this.data.rows[x].obj.County_of_residence2, 0, 10);
+            let labelName = xAxisLabels[x];
+            text(labelName, 0, 10);
             pop();
         }
     }

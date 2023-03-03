@@ -1,13 +1,30 @@
 class BarChart{
     // defines properties in object
-    constructor(_height,_width,_posX,_posY,_data, _bars, _barGap, _markers, _markerSize, _hGridLines, _vGridLines){
+    constructor({
+        _height=400,
+        _width=400,
+        _posX=100,
+        _posY=400,
+        _xName="Sample",
+        _chartValue,
+        _maxValue,
+        _barGap=10,
+        _markers=5,
+        _markerSize=-5,
+        _hGridLines=_markers,
+        _vGridLines=0,
+        _data
+    }){
+
         // this object height
         this.height = _height;
         this.width = _width;
         this.posX = _posX;
         this.posY = _posY;
         this.data = _data;
-        this.bars = _bars;
+        this.xName = _xName;
+        this.chartValue = _chartValue;
+        this.maxValue = _maxValue;
         this.barGap = _barGap;
         this.markerSize = _markerSize
         this.markers = _markers;
@@ -21,36 +38,40 @@ class BarChart{
         this.markerGap = this.height/this.markers;
 
         // calculates bar width
-        this.barWidth = (this.width - (this.leftMargin + this.rightMargin) - ((this.bars - 1)* this.barGap))/this.bars;
+        this.barWidth = (this.width - (this.leftMargin + this.rightMargin) - ((this.data.getRowCount() - 1)* this.barGap))/this.data.getRowCount();
 
         // calculates bar spacing
         this.barSpacing = this.barWidth+this.barGap;
 
         // gets highest value from arrayName
-        // this.highestValue = Math.max(...fruits.map(object => object.sales));
-        this.highestValue = int(this.data.rows[0].obj.MAX_VAL_BAR);
+        // this.highestValue = int(this.data.rows[0].obj[this.maxValue]);
 
-        for(let x=0; x<this.bars -1; x++){
-            if(int(this.data.rows[x].obj.MAX_VAL_BAR) > this.highestValue){
-                this.highestValue = int(this.data.rows[x].obj.MAX_VAL_BAR);
-            }
-        }
-
-        // for(let x = 0; x<this.bars;x++){
-        //     this.masterBarGap = (x * this.barWidth) + (x * this.barGap) + this.leftMargin;
+        // for(let x=0; x<this.data.getRowCount() -1; x++){
+        //     if(int(this.data.rows[x].obj[this.maxValue]) > this.highestValue){
+        //         this.highestValue = int(this.data.rows[x].obj[this.maxValue]);
+        //     }
         // }
 
         // gap between labels
-        this.LabelGap = this.highestValue/this.markers;
+        console.log("highest value for normal barchart is:", this.highestValue())
+        // console.log("barWidth:", this.barWidth);
+    }
 
-        console.log("highest value for normal barchart is:", this.highestValue)
-        console.log("barWidth:", this.barWidth);
+    highestValue(){
+        let maxValue = 0;
+        for(let x=0; x < this.data.getRowCount(); x++){
+            
+            if (int(data.rows[x].obj.MAX_VAL_BAR) > maxValue){
+                maxValue = int(data.rows[x].obj.MAX_VAL_BAR);
+            }
+        }
+        return maxValue;
     }
 
     // calculates how to scale bars based off the highest value
     barScaler(_scalingNum){
-        for(let x = 0; x < this.bars; x++){
-            let scaleValue = this.height/this.highestValue
+        for(let x = 0; x < this.data.getRowCount(); x++){
+            let scaleValue = this.height/this.highestValue();
             return _scalingNum*scaleValue;
         }
     }
@@ -123,20 +144,22 @@ class BarChart{
 
     // draws bars
     barChart(){
-        for(let x = 0; x < this.bars; x++){
+        let barCount = this.data.getRowCount();
+
+        for(let x = 0; x < barCount; x++){
             push();
             // spacing of bars
             translate(this.leftMargin + (x*this.barSpacing), 0)
 
             push();
             // specified data
-            for(let y =0; y < barChartSelect.length; y++){
+            for(let y =0; y < this.chartValue.length; y++){
                 // colors
                 let theColor = y % colors.length;
                 fill(colors[theColor]);
                 
-                let prop = barChartSelect[y];
-                let height = this.barScaler(int(-this.data.rows[x].obj[prop]));
+                // let prop = barChartSelect[y];
+                let height = this.barScaler(int(-this.data.rows[x].obj[this.chartValue[y]]));
                 noStroke();
                 rect(0, 0,this.barWidth/2,height);
                 translate(this.barWidth/2, 0);
@@ -151,6 +174,7 @@ class BarChart{
         for(let x = 0; x <= this.markers ;x++){
             strokeWeight(2);
             line(this.markerSize, x*-this.markerGap, 0, x*-this.markerGap)
+          
     }
 }
 
@@ -161,13 +185,13 @@ class BarChart{
 
     // draws labels on the vertical axis
     chartLabels(){
-
         for(let x = 0; x <= this.markers ;x++){
+            let labelValues = this.highestValue()/this.markers;
             noStroke();
             fill(0);
             textSize(14);
             textAlign(RIGHT, CENTER)
-            text(int(x*this.LabelGap).toFixed(2), -10, x*-this.markerGap);
+            text(int(x*labelValues).toFixed(2), -10, x*-this.markerGap);
         }
     }
 
@@ -182,7 +206,7 @@ class BarChart{
         textAlign(CENTER)
         let prop = "VALUE_M";
         fill(0);
-            for(let x=0; x < this.bars; x++){
+            for(let x=0; x < barCount; x++){
                 push();
                 this.masterBarGap = (x * this.barWidth) + (x * this.barGap) + this.leftMargin;
                 translate(this.masterBarGap + this.barWidth / 2, 0)
@@ -193,7 +217,8 @@ class BarChart{
 
     // draws labels for the x-axis
     xAxisNames(){
-        for(let x = 0; x < this.bars; x++){
+        let xAxisLabels = data.getColumn(this.xName);
+        for(let x = 0; x < xAxisLabels.length; x++){
             push();
             this.masterBarGap = (x * this.barWidth) + (x * this.barGap) + this.leftMargin;
             translate(this.masterBarGap + this.barWidth/2, 10)
@@ -201,8 +226,8 @@ class BarChart{
             textSize(16);
             textAlign(LEFT);
             rotate(30); 
-            let prop = "County_of_residence"
-            text(this.data.rows[x].obj[prop], 0, 10);
+            let labelName = xAxisLabels[x]
+            text(labelName, 0, 10);
             pop();
         }
     }

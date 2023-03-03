@@ -1,8 +1,8 @@
 console.log("barcahrt with csv values");
 let data;
 let stacked;
-let barChartSelect = ["VALUE_M", "VALUE_F"];
-let userSelect = ["VALUE_M2", "VALUE_F2"];
+// let barChartSelect = ["VALUE_M", "VALUE_F"];
+// let userSelect = ["VALUE_M2", "VALUE_F2"];
 let colors = ["#252525", "#FF0000", "#AF0404"];
 let charts=[];
 
@@ -16,9 +16,25 @@ function setup(){
     angleMode(DEGREES);
     rectMode(CORNER);
 
-    charts.push(new BarChart(300, 400, 100, 400, data, data.getRowCount(), 5, 5, -5, 5, 0));
+    charts.push(new BarChart({
+        _height: 300, 
+        _width: 400, 
+        _xName:"County_of_residence",
+        _chartValue:["VALUE_M", "VALUE_F"],
+        _maxValue:"MAX_VAL_BAR",
+        _markers: 5,
+        _markerSize: -5,
+        _barGap: 10,
+        _data:data
+}));
 
-    charts.push(new StackedBar(300, 400, 100, 900, data, data.getRowCount(), 5, 5, -5, 5, 0));
+    charts.push(new StackedBar({
+        _height: 300, 
+        _width: 400,
+        _xName: "County_of_residence2",
+        _chartValue: ["VALUE_M2", "VALUE_F2"],
+        _data:data, 
+}));
 
     charts.push(new HBarChart(400, 300, 650, 90, data, data.getRowCount(), 5, 5, -5, 0, 5));
 

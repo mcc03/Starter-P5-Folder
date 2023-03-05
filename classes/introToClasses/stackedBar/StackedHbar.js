@@ -1,10 +1,10 @@
-class HBarChart{
+class StackedHbar{
     // defines properties in object
     constructor({
         _height=400,
         _width=300,
         _posX=650,
-        _posY=90,
+        _posY=580,
         _yName="Need a name",
         _barGap=5,
         _markers=5, 
@@ -40,7 +40,7 @@ class HBarChart{
     // calculates bar spacing
     this.barSpacing = this.barWidth+this.barGap;
 
-    console.log("highest value is:", this.highestValue());
+    console.log("highest value is stacked Hbar:", this.highestValue());
     console.log("barWidth:", this.barWidth);
 }
 
@@ -52,8 +52,8 @@ class HBarChart{
         let maxValue = 0;
         for(let x=0; x < this.data.getRowCount(); x++){
             
-            if (int(data.rows[x].obj.MAX_VAL_BAR) > maxValue){
-                maxValue = int(data.rows[x].obj.MAX_VAL_BAR);
+            if (int(data.rows[x].obj.TOTALS_STACKED) > maxValue){
+                maxValue = int(data.rows[x].obj.TOTALS_STACKED);
             }
         }
         return maxValue;
@@ -71,7 +71,6 @@ class HBarChart{
     render(){
         push();
         translate(this.posX, this.posY);
-
         this.hGrid();
         this.vGrid();
         this.sidewaysBarChart();
@@ -106,13 +105,24 @@ class HBarChart{
 
         for(let x = 0; x < barCount; x++){
             push();
-            translate(0, this.topMargin + (x*this.barSpacing))
-            let theColor = x % colors.length;
-            fill(colors[theColor]);
-            let height = -this.barScaler(int(-this.data.rows[x].obj[this.chartValue]));
-            noStroke()
-            rect(0, 0, height, this.barWidth);
-            pop();  
+            
+            translate(0, this.topMargin + (x*this.barSpacing));
+
+            push();
+            for(let y = 0; y < this.chartValue.length; y++){
+                let theColor = y % colors.length;
+                fill(colors[theColor]);
+                let height = -this.barScaler(int(-this.data.rows[x].obj[this.chartValue[y]]));
+                noStroke()
+                rect(0, 0, height, this.barWidth);
+                noFill();
+                stroke(240);
+                line(0,0,0,this.barWidth);
+                translate(height, 0);
+            }
+            pop();
+            pop();
+
         }
     }
 
@@ -164,12 +174,14 @@ class HBarChart{
 
         fill(0);
             for(let x=0; x < this.data.getRowCount(); x++){
+                let prop = "TOTALS_STACKED"
+
                 push();
                 translate(0, this.topMargin + (x*this.barSpacing))
                 textStyle(BOLD);
                 textAlign(LEFT, CENTER);
-                let height = -this.barScaler(int(-this.data.rows[x].obj[this.chartValue]));
-                text(this.data.rows[x].obj[this.chartValue], height+5, this.barWidth/2);
+                let height = -this.barScaler(int(-this.data.rows[x].obj[prop]));
+                text(this.data.rows[x].obj[prop], height+5, this.barWidth/2);
                 pop();
             }
         }

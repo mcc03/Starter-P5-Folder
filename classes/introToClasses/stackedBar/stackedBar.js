@@ -52,10 +52,7 @@ class StackedBar{
         //     }
         // }
 
-        // gap between labels
-        this.LabelGap = this.highestValue/this.markers;
-
-        console.log("stacked highest value is:", this.highestValue)
+        console.log("stacked highest value is:", this.highestValue())
         console.log("barWidth:", this.barWidth);
     }
 
@@ -131,8 +128,9 @@ class StackedBar{
 
     // draws bars
     stackedChart(){
-        
-        for(let x = 0; x < this.data.getRowCount(); x++){
+        let barCount = this.data.getRowCount();
+
+        for(let x = 0; x < barCount; x++){
             push();
             // spacing of bars
             translate(this.leftMargin + (x*this.barSpacing), 0)

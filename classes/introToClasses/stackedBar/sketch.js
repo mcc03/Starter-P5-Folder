@@ -36,8 +36,23 @@ function setup(){
         _data:data, 
 }));
 
-    charts.push(new HBarChart(400, 300, 650, 90, data, data.getRowCount(), 5, 5, -5, 0, 5));
+    charts.push(new HBarChart({
+        _height: 400,
+        _width: 300,
+        _yName: "County_of_residence",
+        _chartValue: "VALUE_F",
+        _data:data
 
+    }));
+
+    charts.push(new StackedHbar({
+        _height: 400,
+        _width: 300,
+        _yName: "County_of_residence",
+        _chartValue: ["VALUE_M", "VALUE_F"],
+        _data:data
+
+    }));
 }
 
 function draw(){
@@ -45,6 +60,7 @@ function draw(){
     charts[0].render();
     charts[1].render();
     charts[2].render();
+    charts[3].render();
 }
 
 

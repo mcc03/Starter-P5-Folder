@@ -106,6 +106,7 @@ class StackedHbar{
         for(let x = 0; x < barCount; x++){
             push();
             
+            // translation of bar group
             translate(0, this.topMargin + (x*this.barSpacing));
 
             push();
@@ -113,11 +114,12 @@ class StackedHbar{
                 let theColor = y % colors.length;
                 fill(colors[theColor]);
                 let height = -this.barScaler(int(-this.data.rows[x].obj[this.chartValue[y]]));
-                noStroke()
+                noStroke();
                 rect(0, 0, height, this.barWidth);
                 noFill();
                 stroke(240);
                 line(0,0,0,this.barWidth);
+                // translates the next set of bars on top of each relative first bar
                 translate(height, 0);
             }
             pop();
@@ -228,7 +230,7 @@ class StackedHbar{
         let titleMargin = -10;
         textAlign(CENTER);
         textStyle(BOLD);
-        text("travel time of pop. aged 15 or older at work (female)".toUpperCase(), this.height/2, titleMargin);
+        text("travel time of pop. aged 15 or older at work".toUpperCase(), this.height/2, titleMargin);
     }
 }
 

@@ -1,5 +1,6 @@
 console.log("barcahrt with csv values");
 let data;
+let scatter;
 let stacked;
 // let barChartSelect = ["VALUE_M", "VALUE_F"];
 // let userSelect = ["VALUE_M2", "VALUE_F2"];
@@ -8,6 +9,7 @@ let charts=[];
 
 function preload() {
     data = loadTable('./data/travel_time2016fix.csv', 'csv', 'header');
+    scatter = loadTable('./data/HeightWeight.csv', 'csv', 'header');
     barData = loadTable('./data/stacked_travel2016.csv', 'csv', 'header');
 }
 
@@ -37,7 +39,8 @@ function setup(){
         _xName: "County_of_residence2",
         _chartValue: ["VALUE_M2", "VALUE_F2"],
         _data:data,
-        _posX: 100 
+        _posX: 100, 
+        _tLine:"AVG_R"
 }));
 
     charts.push(new HBarChart({
@@ -47,7 +50,7 @@ function setup(){
         _chartValue: "VALUE_F",
         _data:data,
         _posX: 650
-
+    
     }));
 
     charts.push(new StackedHbar({
@@ -57,7 +60,6 @@ function setup(){
         _chartValue: ["VALUE_M", "VALUE_F"],
         _data:data,
         _posX: 650
-
     }));
 
     charts.push(new LineChart({
@@ -70,6 +72,19 @@ function setup(){
         _posY: 400
 }));
 
+charts.push(new ScatterPlot({
+    _height: 300, 
+    _width: 300, 
+    _xName:"County_of_residence",
+    _markers: 5,
+    _markerSize: -5,
+    _barGap: 10,
+    _scatter:scatter,
+    _line:"AVG_R",
+    _posX: 1200
+
+}));
+
 }
 
 function draw(){
@@ -79,6 +94,7 @@ function draw(){
     charts[2].render();
     charts[3].render();
     charts[4].render();
+    charts[5].render();
 }
 
 

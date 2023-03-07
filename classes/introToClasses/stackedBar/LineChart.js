@@ -127,26 +127,46 @@ class LineChart{
     // draws a trendline based on avg values
     trendLine() {
         beginShape();
+        
+        for(let x = 0; x < this.data.getRowCount(); x++){
+            
+            let xValue = this.leftMargin + (x*this.barSpacing) + (this.barWidth/2);
+            
+            strokeWeight(2);
+                for(let y =0; y < this.chartValue.length; y++){
+                    
+                    let theColor = x % colors.length;
+                    noFill();
+                    stroke(colors[theColor]);
+                    let line1 = this.barScaler(int(-this.data.rows[x].obj[this.chartValue[0]]));
+                    // draws a continous line
+                    vertex(xValue,line1);
+                    // draws circle at average point per bar
+                    ellipse(xValue,line1,10,10);
+                    
+                }  
+        }
+        endShape();
+
+        beginShape();
         for(let x = 0; x < this.data.getRowCount(); x++){
 
             let xValue = this.leftMargin + (x*this.barSpacing) + (this.barWidth/2);
             
             strokeWeight(2);
                 for(let y =0; y < this.chartValue.length; y++){
-                    let theColor = y % colors.length;
+                    let theColor = x % colors.length;
                     noFill();
                     stroke(colors[theColor]);
-
-                    let avgPointY = this.barScaler(int(-this.data.rows[x].obj[this.chartValue[y]]));
+                    let line1 = this.barScaler(int(-this.data.rows[x].obj[this.chartValue[1]]));
                     // draws a continous line
-                    vertex(xValue,avgPointY);
+                    vertex(xValue,line1);
                     // draws circle at average point per bar
-                    ellipse(xValue,avgPointY,10,10);
-                    translate(0,0)
-                }
-                
+                    ellipse(xValue,line1,10,10);
+                    endShape();
+                }  
         }
-        endShape();
+        
     }
 
     // draws marks on Vaxis

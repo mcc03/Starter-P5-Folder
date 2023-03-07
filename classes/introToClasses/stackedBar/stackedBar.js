@@ -13,7 +13,7 @@ class StackedBar{
         _markerSize=-5, 
         _hGridLines=5, 
         _vGridLines=0,
-        _line = "AVG_R"
+        _tLine = "testr"
     }){
 
         // this object height
@@ -32,7 +32,7 @@ class StackedBar{
         this.rightMargin = 10;
         this.hGridLines = _hGridLines;
         this.vGridLines = _vGridLines;
-        this.line = _line;
+        this.tLine = _tLine;
         // this.gridCount = _gridCount;
 
         // gap between markers
@@ -166,7 +166,7 @@ class StackedBar{
             stroke(255);
             strokeWeight(2);
             
-            let avgPointY = this.barScaler(int(-this.data.rows[x].obj[this.line]))
+            let avgPointY = this.barScaler(int(-this.data.rows[x].obj[this.tLine]))
             
             // draws a continous line
             vertex(xValue,avgPointY);

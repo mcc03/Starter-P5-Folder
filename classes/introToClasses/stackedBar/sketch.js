@@ -18,41 +18,58 @@ function setup(){
 
     charts.push(new BarChart({
         _height: 300, 
-        _width: 400, 
+        _width: 300, 
         _xName:"County_of_residence",
         _chartValue:["VALUE_M", "VALUE_F"],
         _maxValue:"MAX_VAL_BAR",
         _markers: 5,
         _markerSize: -5,
         _barGap: 10,
-        _data:data
+        _data:data,
+        _line:"AVG_R",
+        _posX: 100
+
 }));
 
     charts.push(new StackedBar({
         _height: 300, 
-        _width: 400,
+        _width: 300,
         _xName: "County_of_residence2",
         _chartValue: ["VALUE_M2", "VALUE_F2"],
-        _data:data, 
+        _data:data,
+        _posX: 100 
 }));
 
     charts.push(new HBarChart({
-        _height: 400,
+        _height: 300,
         _width: 300,
         _yName: "County_of_residence",
         _chartValue: "VALUE_F",
-        _data:data
+        _data:data,
+        _posX: 650
 
     }));
 
     charts.push(new StackedHbar({
-        _height: 400,
+        _height: 300,
         _width: 300,
         _yName: "County_of_residence",
         _chartValue: ["VALUE_M", "VALUE_F"],
-        _data:data
+        _data:data,
+        _posX: 650
 
     }));
+
+    charts.push(new LineChart({
+        _height: 300, 
+        _width: 300,
+        _xName: "County_of_residence2",
+        _chartValue: ["VALUE_M", "VALUE_F"],
+        _data:data,
+        _posX: 1200,
+        _posY: 400
+}));
+
 }
 
 function draw(){
@@ -61,6 +78,7 @@ function draw(){
     charts[1].render();
     charts[2].render();
     charts[3].render();
+    charts[4].render();
 }
 
 

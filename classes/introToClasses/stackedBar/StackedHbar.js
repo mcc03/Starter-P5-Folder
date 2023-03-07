@@ -3,7 +3,7 @@ class StackedHbar{
     constructor({
         _height=400,
         _width=300,
-        _posX=650,
+        _posX=700,
         _posY=580,
         _yName="Need a name",
         _barGap=5,
@@ -81,6 +81,7 @@ class StackedHbar{
         this.barLabels();
         this.yAxisNames();
         this.chartTitle();
+        this.legend();
         pop();
     }
 
@@ -231,6 +232,22 @@ class StackedHbar{
         textAlign(CENTER);
         textStyle(BOLD);
         text("travel time of pop. aged 15 or older at work".toUpperCase(), this.height/2, titleMargin);
+    }
+
+    legend(){
+        noStroke();
+        for(let x = 0; x < this.chartValue.length; x++){
+            let legendSpacer = 20;
+            let rectSpacer = 20;
+            textAlign(LEFT);
+            textStyle(BOLD);
+            text(this.chartValue[x].toUpperCase(), this.height+20, this.width/2+(x*legendSpacer));
+
+            let theColor = x % colors.length;
+            
+            fill(colors[theColor]);
+            rect(this.height, this.width/2+(x*rectSpacer), 15, 15);
+        }
     }
 }
 

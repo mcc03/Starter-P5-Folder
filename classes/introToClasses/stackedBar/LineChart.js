@@ -1,19 +1,18 @@
-class BarChart{
+class LineChart{
     // defines properties in object
     constructor({
         _height=400,
         _width=400,
-        _posX=100,
-        _posY=400,
-        _xName="Sample",
+        _posX=800,
+        _posY=200,
+        _xName,
         _chartValue,
-        _maxValue,
-        _barGap=10,
-        _markers=5,
-        _markerSize=-5,
-        _hGridLines=_markers,
+        _data,
+        _barGap=10, 
+        _markers=5, 
+        _markerSize=-5, 
+        _hGridLines=5, 
         _vGridLines=0,
-        _data
     }){
 
         // this object height
@@ -24,7 +23,7 @@ class BarChart{
         this.data = _data;
         this.xName = _xName;
         this.chartValue = _chartValue;
-        this.maxValue = _maxValue;
+         // this.maxValue = "TOTALS";
         this.barGap = _barGap;
         this.markerSize = _markerSize
         this.markers = _markers;
@@ -44,17 +43,17 @@ class BarChart{
         this.barSpacing = this.barWidth+this.barGap;
 
         // gets highest value from arrayName
-        // this.highestValue = int(this.data.rows[0].obj[this.maxValue]);
+        // this.highestValue = Math.max(...fruits.map(object => object.sales));
+        // this.highestValue = int(this.data.rows[0].obj.MAX_S);
 
-        // for(let x=0; x<this.data.getRowCount() -1; x++){
-        //     if(int(this.data.rows[x].obj[this.maxValue]) > this.highestValue){
-        //         this.highestValue = int(this.data.rows[x].obj[this.maxValue]);
+        // for(let x=0; x<this.bars -1; x++){
+        //     if(int(this.data.rows[x].obj.MAX_S) > this.highestValue){
+        //         this.highestValue = int(this.data.rows[x].obj.MAX_S);
         //     }
         // }
 
-        // gap between labels
-        console.log("highest value for normal barchart is:", this.highestValue())
-        // console.log("barWidth:", this.barWidth);
+        console.log("linechart highest value is:", this.highestValue())
+        console.log("barWidth:", this.barWidth);
     }
 
     highestValue(){
@@ -70,52 +69,35 @@ class BarChart{
 
     // calculates how to scale bars based off the highest value
     barScaler(_scalingNum){
-        for(let x = 0; x < this.data.getRowCount(); x++){
             let scaleValue = this.height/this.highestValue();
             return _scalingNum*scaleValue;
-        }
     }
-
-    // capitalFirst(str){
-    // return str
-    //     .toLowerCase()
-    //     .split(' ')
-    //     .map((word) => word.charAt(0).toUpperCase() + word.slice(1))
-    //     .join(' ');
-    // }
 
     // draws the functions when called
     render(){
         push();
         translate(this.posX, this.posY);
-
+        this.legend();
         this.hGrid();
         this.vGrid();
-        this.vAxis();
-        this.hAxis();
-        this.barChart();
         this.chartMarkers();
         this.chartLabels();
-        // this.barLabels();
+        this.vAxis();
+        this.hAxis();
         this.xAxisNames();
         this.chartTitle();
-        this.legend();
-
+        this.trendLine();
         pop();
     }
 
     // draws vertical axis
     vAxis(){
-        noFill();
-        strokeWeight(1);
         stroke(0);
         line(0,0,0,-this.height)
     }
 
     // draw horizontal axis
     hAxis(){
-        noFill();
-        strokeWeight(1);
         stroke(0);
         line(0,0,this.width,0)
     }
@@ -131,60 +113,50 @@ class BarChart{
         // }   
     }
     
-     // draw vertical grid lines
+     // draw horizontal grid lines
     vGrid(){
         // if(this.gridCount == true){
             for(let x = 1; x <= this.vGridLines ;x++){
                 stroke(255);
-                strokeWeight(2);
+                strokeWeight(1);
                 line(x*this.width/this.vGridLines, -this.height, x*this.width/this.vGridLines, 0)
             }
         // }   
     }
 
-    // draws bars
-    barChart(){
-        let barCount = this.data.getRowCount();
+    // draws a trendline based on avg values
+    trendLine() {
+        beginShape();
+        for(let x = 0; x < this.data.getRowCount(); x++){
 
-        for(let x = 0; x < barCount; x++){
-            push();
-            // spacing of bars
-            translate(this.leftMargin + (x*this.barSpacing), 0)
+            let xValue = this.leftMargin + (x*this.barSpacing) + (this.barWidth/2);
+            
+            strokeWeight(2);
+                for(let y =0; y < this.chartValue.length; y++){
+                    let theColor = y % colors.length;
+                    noFill();
+                    stroke(colors[theColor]);
 
-            push();
-            // specified data
-            for(let y =0; y < this.chartValue.length; y++){
-                // colors
-                let theColor = y % colors.length;
-                fill(colors[theColor]);
+                    let avgPointY = this.barScaler(int(-this.data.rows[x].obj[this.chartValue[y]]));
+                    // draws a continous line
+                    vertex(xValue,avgPointY);
+                    // draws circle at average point per bar
+                    ellipse(xValue,avgPointY,10,10);
+                    translate(0,0)
+                }
                 
-                let height = this.barScaler(int(-this.data.rows[x].obj[this.chartValue[y]]));
-                noStroke();
-
-                // divides the barWidth by the length of the data array to fit bars
-                let dataLength = this.chartValue.length;
-
-                rect(0, 0,this.barWidth/dataLength,height);
-                translate(this.barWidth/dataLength, 0);
-            }
-            pop();
-            pop();
         }
+        endShape();
     }
 
     // draws marks on Vaxis
     chartMarkers(){
         for(let x = 0; x <= this.markers ;x++){
-            strokeWeight(2);
-            line(this.markerSize, x*-this.markerGap, 0, x*-this.markerGap);
-          
+            stroke(0);
+            strokeWeight(1);
+            line(this.markerSize, x*-this.markerGap, 0, x*-this.markerGap)
     }
 }
-
-// let num = 2701
-// for(let x = num; x %(mod) 7 ==0; x++){
-// roundMaxNum = x; 
-// }
 
     // draws labels on the vertical axis
     chartLabels(){
@@ -192,59 +164,37 @@ class BarChart{
             let labelValues = this.highestValue()/this.markers;
             noStroke();
             fill(0);
-            textSize(14);
+            textSize(12);
             textAlign(RIGHT, CENTER)
             text(int(x*labelValues).toFixed(0), -10, x*-this.markerGap);
         }
     }
 
-    // placement of number above bar
-    /* VERTICAL SPACING: Here I want to loop through the array of objects, getting the value of sales from each object 
-    + x amount of spacing to appear above the bar. I also use the scaler function to scale the values to match the bars*/
-    // HORIZONTAL SPACING: Here I want to space them horizontally to line up above the corresponding bar 
-    barLabels(){
-        textSize(16);
-        noStroke();
-        textStyle(BOLD);
-        textAlign(CENTER)
-        let prop = "VALUE_M";
-        fill(0);
-            for(let x=0; x < barCount; x++){
-                push();
-                this.masterBarGap = (x * this.barWidth) + (x * this.barGap) + this.leftMargin;
-                translate(this.masterBarGap + this.barWidth / 2, 0)
-                text(this.data.rows[x].obj[prop], 0, this.barScaler(-this.data.rows[x].obj[prop])-10);
-                pop();
-            }
-    }
-
-    // draws labels for the x-axis
     xAxisNames(){
         let xAxisLabels = data.getColumn(this.xName);
-        for(let x = 0; x < xAxisLabels.length; x++){
+        for(let x = 0; x < this.data.getRowCount(); x++){
             push();
             this.masterBarGap = (x * this.barWidth) + (x * this.barGap) + this.leftMargin;
-            translate(this.masterBarGap + this.barWidth/2, 10)
+            translate(this.masterBarGap + this.barWidth / 2, 10)
             textStyle(NORMAL);
-            textSize(16);
             textAlign(LEFT);
+            noStroke();
             rotate(30); 
-            let labelName = xAxisLabels[x]
+            let labelName = xAxisLabels[x];
             text(labelName, 0, 10);
             pop();
         }
     }
-    
-    // draws chart title
+
     chartTitle(){
-        let titleMargin = (this.height*-1)-40
+        let titleMargin = -this.height-40
+        noStroke();
         textAlign(CENTER);
         textStyle(BOLD);
-        let prop = 'At_work_school_or_college'
+        let prop = 'At_work_school_or_college2'
         text(this.data.rows[0].obj[prop].toUpperCase(), this.width/2, titleMargin);
     }
 
-    // draws legends
     legend(){
         noStroke();
         for(let x = 0; x < this.chartValue.length; x++){

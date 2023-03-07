@@ -12,9 +12,10 @@ class StackedBar{
         _markers=5, 
         _markerSize=-5, 
         _hGridLines=5, 
-        _vGridLines=0
-    }
-        ){
+        _vGridLines=0,
+        _line = "AVG_R"
+    }){
+
         // this object height
         this.height = _height;
         this.width = _width;
@@ -31,6 +32,7 @@ class StackedBar{
         this.rightMargin = 10;
         this.hGridLines = _hGridLines;
         this.vGridLines = _vGridLines;
+        this.line = _line;
         // this.gridCount = _gridCount;
 
         // gap between markers
@@ -77,6 +79,7 @@ class StackedBar{
     render(){
         push();
         translate(this.posX, this.posY);
+        this.legend();
         this.hGrid();
         this.vGrid();
         this.stackedChart();
@@ -88,7 +91,6 @@ class StackedBar{
         this.xAxisNames();
         this.chartTitle();
         this.trendLine();
-        // this.avgLine();
         pop();
     }
 
@@ -154,41 +156,26 @@ class StackedBar{
         
     }
 
+    // draws a trendline based on avg values
     trendLine() {
-
+        beginShape();
         for(let x = 0; x < this.data.getRowCount(); x++){
-            push();
-
-            // spacing
-            translate(this.leftMargin + (x*this.barSpacing), 0)
-            let prop = "AVG_R";
-            let circleAVG = this.barScaler(int(-this.data.rows[x].obj[prop]))
-            fill(255);
+         
+            let xValue = this.leftMargin + (x*this.barSpacing) + (this.barWidth/2);
+            noFill()
             stroke(255);
             strokeWeight(2);
-            circle(this.barWidth/2, circleAVG, 10);
-            strokeWeight(4);
-            line(this.barWidth/2, circleAVG, 50*2, -circleAVG);
-            pop();
-        }
-    }
-
-    // avgLine() {
-    //     for(let x = 0; x < this.bars; x++){
-    //         push();
-
-    //         // spacing
-    //         translate(this.leftMargin + (x*this.barSpacing), 0)
-    //         let prop = "AVG_R";
-    //         let circleAVG = this.barScaler(int(-this.data.rows[x].obj[prop]))
             
-    //         fill(255);
-    //         stroke(255);
-    //         strokeWeight(4);
-    //         line(this.barWidth/2, circleAVG, 0, circleAVG);
-    //         pop();
-    //     }
-    // }
+            let avgPointY = this.barScaler(int(-this.data.rows[x].obj[this.line]))
+            
+            // draws a continous line
+            vertex(xValue,avgPointY);
+            // draws circle at average point per bar
+            ellipse(xValue,avgPointY,10,10)
+
+        }
+        endShape();
+    }
 
     // draws marks on Vaxis
     chartMarkers(){
@@ -248,12 +235,29 @@ class StackedBar{
     }
 
     chartTitle(){
-        let titleMargin = (this.height*-1)-40
+        let titleMargin = -this.height-40
         noStroke();
         textAlign(CENTER);
         textStyle(BOLD);
         let prop = 'At_work_school_or_college2'
         text(this.data.rows[0].obj[prop].toUpperCase(), this.width/2, titleMargin);
+    }
+
+    legend(){
+        noStroke();
+        for(let x = 0; x < this.chartValue.length; x++){
+            let legendSpacer = 20;
+            let rectSpacer = 20;
+            textAlign(LEFT);
+            textStyle(BOLD);
+            text(this.chartValue[x].toUpperCase(), this.width, -this.height+(x*legendSpacer));
+
+            let theColor = x % colors.length;
+            
+            fill(colors[theColor]);
+            rect(380, -this.height-(x*rectSpacer), 15, 15);
+        }
+
     }
 
 }

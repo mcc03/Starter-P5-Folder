@@ -158,7 +158,6 @@ class BarChart{
                 let theColor = y % colors.length;
                 fill(colors[theColor]);
                 
-                // let prop = barChartSelect[y];
                 let height = this.barScaler(int(-this.data.rows[x].obj[this.chartValue[y]]));
                 noStroke();
                 rect(0, 0,this.barWidth/2,height);
@@ -173,7 +172,7 @@ class BarChart{
     chartMarkers(){
         for(let x = 0; x <= this.markers ;x++){
             strokeWeight(2);
-            line(this.markerSize, x*-this.markerGap, 0, x*-this.markerGap)
+            line(this.markerSize, x*-this.markerGap, 0, x*-this.markerGap);
           
     }
 }
@@ -191,7 +190,7 @@ class BarChart{
             fill(0);
             textSize(14);
             textAlign(RIGHT, CENTER)
-            text(int(x*labelValues).toFixed(2), -10, x*-this.markerGap);
+            text(int(x*labelValues).toFixed(0), -10, x*-this.markerGap);
         }
     }
 

@@ -151,7 +151,7 @@ class HBarChart{
             textSize(14);
             textAlign(LEFT, CENTER);
             rotate(30);
-            text(int(labelValues*x).toFixed(2), 5, 15);
+            text(int(labelValues*x).toFixed(0), 5, 15);
             pop();
         }
     }

@@ -6,6 +6,7 @@ class BarChart{
         _posX=100,
         _posY=400,
         _xName="Sample",
+        _chartName = "test",
         _chartValue,
         _maxValue,
         _barGap=10,
@@ -24,6 +25,7 @@ class BarChart{
         this.data = _data;
         this.xName = _xName;
         this.chartValue = _chartValue;
+        this.chartName = _chartName;
         this.maxValue = _maxValue;
         this.barGap = _barGap;
         this.markerSize = _markerSize
@@ -60,7 +62,6 @@ class BarChart{
     highestValue(){
         let maxValue = 0;
         for(let x=0; x < this.data.getRowCount(); x++){
-            
             if (int(data.rows[x].obj.MAX_VAL_BAR) > maxValue){
                 maxValue = int(data.rows[x].obj.MAX_VAL_BAR);
             }
@@ -108,7 +109,7 @@ class BarChart{
     vAxis(){
         noFill();
         strokeWeight(1);
-        stroke(0);
+        stroke(255);
         line(0,0,0,-this.height)
     }
 
@@ -116,7 +117,7 @@ class BarChart{
     hAxis(){
         noFill();
         strokeWeight(1);
-        stroke(0);
+        stroke(255);
         line(0,0,this.width,0)
     }
 
@@ -124,7 +125,7 @@ class BarChart{
     hGrid(){
         // if(this.gridCount == true){
             for(let x = 1; x <= this.hGridLines ;x++){
-                stroke(150, 70);
+                stroke(255, 100);
                 strokeWeight(2);
                 line(this.markerSize, x*-this.markerGap, this.width, x*-this.markerGap)
             }
@@ -191,7 +192,7 @@ class BarChart{
         for(let x = 0; x <= this.markers ;x++){
             let labelValues = this.highestValue()/this.markers;
             noStroke();
-            fill(0);
+            fill(255);
             textSize(14);
             textAlign(RIGHT, CENTER)
             text(int(x*labelValues).toFixed(0), -10, x*-this.markerGap);
@@ -240,8 +241,8 @@ class BarChart{
         let titleMargin = (this.height*-1)-40
         textAlign(CENTER);
         textStyle(BOLD);
-        let prop = 'At_work_school_or_college'
-        text(this.data.rows[0].obj[prop].toUpperCase(), this.width/2, titleMargin);
+        // let prop = 'At_work_school_or_college'
+        text(this.data.rows[0].obj[this.chartName].toUpperCase(), this.width/2, titleMargin);
     }
 
     // draws legends
@@ -250,14 +251,17 @@ class BarChart{
         for(let x = 0; x < this.chartValue.length; x++){
             let legendSpacer = 20;
             let rectSpacer = 20;
+            let margin = 30;
             textAlign(LEFT);
             textStyle(BOLD);
-            text(this.chartValue[x].toUpperCase(), this.width, -this.height+(x*legendSpacer));
+            fill(255);
+            // draws legend name
+            text(this.chartValue[x].toUpperCase(), this.width+rectSpacer, -this.height+(x*legendSpacer));
 
             let theColor = x % colors.length;
-            
             fill(colors[theColor]);
-            rect(380, -this.height-(x*rectSpacer), 15, 15);
+            // colour reference
+            rect(this.width, -this.height+margin-(x*rectSpacer), 15, 15);
         }
 
     }

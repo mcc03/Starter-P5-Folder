@@ -72,6 +72,7 @@ class ScatterPlot{
         for(let x = 0; x < this.scatter.getRowCount(); x++){
             let scaleValue = this.height/this.highestWeight();
             return _scalingNum*scaleValue;
+            
         }
     }
 

@@ -6,6 +6,7 @@ class HBarChart{
         _posX=700,
         _posY=90,
         _yName="Need a name",
+        _chartName,
         _barGap=5,
         _markers=5, 
         _markerSize=-5, 
@@ -29,6 +30,7 @@ class HBarChart{
         this.hGridLines = _hGridLines;
         this.vGridLines = _vGridLines;
         this.chartValue = _chartValue;
+        this.chartName = _chartName;
         this.yName = _yName;
 
     // gap between markers
@@ -52,8 +54,8 @@ class HBarChart{
         let maxValue = 0;
         for(let x=0; x < this.data.getRowCount(); x++){
             
-            if (int(data.rows[x].obj.MAX_VAL_BAR) > maxValue){
-                maxValue = int(data.rows[x].obj.MAX_VAL_BAR);
+            if (int(data.rows[x].obj[this.chartValue]) > maxValue){
+                maxValue = int(data.rows[x].obj[this.chartValue]);
             }
         }
         return maxValue;
@@ -121,7 +123,7 @@ class HBarChart{
     vAxis(){
         noFill();
         strokeWeight(1);
-        stroke(0);
+        stroke(255);
         line(0,0,0,this.width)
     }
 
@@ -129,7 +131,7 @@ class HBarChart{
     hAxis(){
         noFill();
         strokeWeight(1);
-        stroke(0);
+        stroke(255);
         line(0,this.width,this.height,this.width)
     }
 
@@ -148,7 +150,7 @@ class HBarChart{
             push();
             translate(x*this.markerGap, this.width);
             noStroke();
-            fill(0);
+            fill(255);
             textSize(14);
             textAlign(LEFT, CENTER);
             rotate(30);
@@ -163,7 +165,7 @@ class HBarChart{
         noStroke();
         textAlign(CENTER);
 
-        fill(0);
+        fill(255);
             for(let x=0; x < this.data.getRowCount(); x++){
                 push();
                 translate(0, this.topMargin + (x*this.barSpacing))
@@ -194,7 +196,7 @@ class HBarChart{
     hGrid(){
         // if(this.gridCount == true){
             for(let x = 1; x <= this.hGridLines ;x++){
-                stroke(150, 70);
+                stroke(255, 100);
                 strokeWeight(2);
                 line(this.markerSize, x*this.markerGap, this.height, x*this.markerGap)
             }
@@ -205,7 +207,7 @@ class HBarChart{
     vGrid(){
         // if(this.gridCount == true){
             for(let x = 1; x <= this.vGridLines ;x++){
-                stroke(150, 70);
+                stroke(255, 100);
                 strokeWeight(2);
                 line(x*this.height/this.vGridLines, this.width, x*this.height/this.vGridLines, 0)
             }
@@ -215,9 +217,11 @@ class HBarChart{
     // draws chart title
     chartTitle(){
         let titleMargin = -10;
+        textSize(14);
         textAlign(CENTER);
         textStyle(BOLD);
-        text("travel time of pop. aged 15 or older at work (female)".toUpperCase(), this.height/2, titleMargin);
+        fill(255);
+        text(this.data.rows[0].obj[this.chartName].toUpperCase(), this.height/2, titleMargin);
     }
 
     legend(){
@@ -227,6 +231,7 @@ class HBarChart{
             let rectSpacer = 20;
             textAlign(LEFT);
             textStyle(BOLD);
+            fill(255);
             text(this.chartValue[x].toUpperCase(), this.height+20, this.width/2+(x*legendSpacer));
 
             let theColor = x % colors.length;

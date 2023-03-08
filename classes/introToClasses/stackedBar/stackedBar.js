@@ -9,7 +9,8 @@ class StackedBar{
         _chartValue,
         _data,
         _barGap=10, 
-        _markers=5, 
+        _markers=5,
+        _chartName, 
         _markerSize=-5, 
         _hGridLines=5, 
         _vGridLines=0,
@@ -24,6 +25,7 @@ class StackedBar{
         this.data = _data;
         this.xName = _xName;
         this.chartValue = _chartValue;
+        this.chartName = _chartName;
          // this.maxValue = "TOTALS";
         this.barGap = _barGap;
         this.markerSize = _markerSize
@@ -96,13 +98,13 @@ class StackedBar{
 
     // draws vertical axis
     vAxis(){
-        stroke(0);
+        stroke(255);
         line(0,0,0,-this.height)
     }
 
     // draw horizontal axis
     hAxis(){
-        stroke(0);
+        stroke(255);
         line(0,0,this.width,0)
     }
 
@@ -110,7 +112,7 @@ class StackedBar{
     hGrid(){
         // if(this.gridCount == true){
             for(let x = 1; x <= this.hGridLines ;x++){
-                stroke(150, 70);
+                stroke(255, 100);
                 strokeWeight(2);
                 line(this.markerSize, x*-this.markerGap, this.width, x*-this.markerGap)
             }
@@ -121,7 +123,7 @@ class StackedBar{
     vGrid(){
         // if(this.gridCount == true){
             for(let x = 1; x <= this.vGridLines ;x++){
-                stroke(255);
+                stroke(255, 100);
                 strokeWeight(1);
                 line(x*this.width/this.vGridLines, -this.height, x*this.width/this.vGridLines, 0)
             }
@@ -180,7 +182,7 @@ class StackedBar{
     // draws marks on Vaxis
     chartMarkers(){
         for(let x = 0; x <= this.markers ;x++){
-            stroke(0);
+            stroke(255);
             strokeWeight(1);
             line(this.markerSize, x*-this.markerGap, 0, x*-this.markerGap)
     }
@@ -191,7 +193,7 @@ class StackedBar{
         for(let x = 0; x <= this.markers ;x++){
             let labelValues = this.highestValue()/this.markers;
             noStroke();
-            fill(0);
+            fill(255);
             textSize(12);
             textAlign(RIGHT, CENTER)
             text(int(x*labelValues).toFixed(0), -10, x*-this.markerGap);
@@ -208,7 +210,7 @@ class StackedBar{
         noStroke();
         textAlign(CENTER)
         let prop = "TOTALS";
-        fill(0);
+        fill(255);
             for(let x=0; x<this.data.getRowCount(); x++){
                 push();
                 this.masterBarGap = (x * this.barWidth) + (x * this.barGap) + this.leftMargin;
@@ -237,10 +239,11 @@ class StackedBar{
     chartTitle(){
         let titleMargin = -this.height-40
         noStroke();
+        textSize(14);
         textAlign(CENTER);
         textStyle(BOLD);
-        let prop = 'At_work_school_or_college2'
-        text(this.data.rows[0].obj[prop].toUpperCase(), this.width/2, titleMargin);
+        // let prop = 'At_work_school_or_college2'
+        text(this.data.rows[0].obj[this.chartName].toUpperCase(), this.width/2, titleMargin);
     }
 
     legend(){
@@ -248,14 +251,17 @@ class StackedBar{
         for(let x = 0; x < this.chartValue.length; x++){
             let legendSpacer = 20;
             let rectSpacer = 20;
+            let margin = 30;
             textAlign(LEFT);
             textStyle(BOLD);
-            text(this.chartValue[x].toUpperCase(), this.width, -this.height+(x*legendSpacer));
+            fill(255);
+            // draws legend name
+            text(this.chartValue[x].toUpperCase(), this.width+rectSpacer, -this.height+(x*legendSpacer));
 
             let theColor = x % colors.length;
-            
             fill(colors[theColor]);
-            rect(380, -this.height-(x*rectSpacer), 15, 15);
+            // colour reference
+            rect(this.width, -this.height+margin-(x*rectSpacer), 15, 15);
         }
 
     }

@@ -13,6 +13,7 @@ class HBarChart{
         _hGridLines=0, 
         _vGridLines=5, 
         _chartValue,
+        _valueLabelName = "VALUE_LABEL",
         _data       
     }){
 
@@ -31,6 +32,7 @@ class HBarChart{
         this.vGridLines = _vGridLines;
         this.chartValue = _chartValue;
         this.chartName = _chartName;
+        this.valueLabelName = _valueLabelName;
         this.yName = _yName;
 
     // gap between markers
@@ -85,6 +87,7 @@ class HBarChart{
         this.yAxisNames();
         this.chartTitle();
         // this.legend();
+        this.valueLabel();
         pop();
     }
 
@@ -110,8 +113,8 @@ class HBarChart{
         for(let x = 0; x < barCount; x++){
             push();
             translate(0, this.topMargin + (x*this.barSpacing))
-            let theColor = x % colors.length;
-            fill(colors[theColor]);
+            let theColor = x % colorPalette.length;
+            fill(colorPalette[theColor]);
             let height = -this.barScaler(int(-this.data.rows[x].obj[this.chartValue]));
             noStroke()
             rect(0, 0, height, this.barWidth);
@@ -234,12 +237,27 @@ class HBarChart{
             fill(255);
             text(this.chartValue[x].toUpperCase(), this.height+20, this.width/2+(x*legendSpacer));
 
-            let theColor = x % colors.length;
+            let theColor = x % colorPalette.length;
             
-            fill(colors[theColor]);
+            fill(colorPalette[theColor]);
             rect(this.height, this.width/2+(x*rectSpacer), 15, 15);
         }
     }
+
+     // draws the label for the axis that diplays the number values
+     valueLabel(){
+        
+        push();
+        let margin = -50;
+        translate(this.height/2, this.width-margin)
+        textStyle(BOLD);
+        textAlign(CENTER);; 
+        fill(255);
+        textSize(14);
+        text(this.data.rows[0].obj[this.valueLabelName].toUpperCase(), 0, 10);
+        pop();
+    }
+
 }
 
 

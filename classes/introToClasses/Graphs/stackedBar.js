@@ -14,6 +14,8 @@ class StackedBar{
         _markerSize=-5, 
         _hGridLines=5, 
         _vGridLines=0,
+        _totalSums = "TOTALS_STACKED",
+        _valueLabelName = "VALUE_LABEL",
         _tLine = "testr"
     }){
 
@@ -26,7 +28,7 @@ class StackedBar{
         this.xName = _xName;
         this.chartValue = _chartValue;
         this.chartName = _chartName;
-         // this.maxValue = "TOTALS";
+        this.totalSums = _totalSums
         this.barGap = _barGap;
         this.markerSize = _markerSize
         this.markers = _markers;
@@ -34,6 +36,7 @@ class StackedBar{
         this.rightMargin = 10;
         this.hGridLines = _hGridLines;
         this.vGridLines = _vGridLines;
+        this.valueLabelName = _valueLabelName;
         this.tLine = _tLine;
         // this.gridCount = _gridCount;
 
@@ -64,8 +67,8 @@ class StackedBar{
         let maxValue = 0;
         for(let x=0; x < this.data.getRowCount(); x++){
             
-            if (int(data.rows[x].obj.TOTALS) > maxValue){
-                maxValue = int(data.rows[x].obj.TOTALS);
+            if (int(data.rows[x].obj[this.totalSums]) > maxValue){
+                maxValue = int(data.rows[x].obj[this.totalSums]);
             }
         }
         return maxValue;
@@ -93,6 +96,7 @@ class StackedBar{
         this.xAxisNames();
         this.chartTitle();
         this.trendLine();
+        this.valueLabel();
         pop();
     }
 
@@ -142,13 +146,13 @@ class StackedBar{
             push();
             // specified columns of data
             for(let y =0; y < this.chartValue.length; y++){
-                let theColor = y % colors.length;
-                fill(colors[theColor]);
+                let theColor = y % colorPalette.length;
+                fill(colorPalette[theColor]);
                 let height = this.barScaler(int(-this.data.rows[x].obj[this.chartValue[y]]));
                 noStroke();
                 rect(0, 0,this.barWidth,height);
                 noFill();
-                stroke(240);
+                stroke(0);
                 line(0,0,this.barWidth,0);
                 translate(0, height);
             }
@@ -209,13 +213,12 @@ class StackedBar{
         textStyle(BOLD);
         noStroke();
         textAlign(CENTER)
-        let prop = "TOTALS";
         fill(255);
             for(let x=0; x<this.data.getRowCount(); x++){
                 push();
                 this.masterBarGap = (x * this.barWidth) + (x * this.barGap) + this.leftMargin;
                 translate(this.masterBarGap + this.barWidth / 2, 0)
-                text(this.data.rows[x].obj[prop], 0, this.barScaler(-this.data.rows[x].obj[prop])-10);
+                text(this.data.rows[x].obj[this.totalSums], 0, this.barScaler(-this.data.rows[x].obj[this.totalSums])-10);
                 pop();
             }
     }
@@ -242,7 +245,6 @@ class StackedBar{
         textSize(14);
         textAlign(CENTER);
         textStyle(BOLD);
-        // let prop = 'At_work_school_or_college2'
         text(this.data.rows[0].obj[this.chartName].toUpperCase(), this.width/2, titleMargin);
     }
 
@@ -258,12 +260,26 @@ class StackedBar{
             // draws legend name
             text(this.chartValue[x].toUpperCase(), this.width+rectSpacer, -this.height+(x*legendSpacer));
 
-            let theColor = x % colors.length;
-            fill(colors[theColor]);
+            let theColor = x % colorPalette.length;
+            fill(colorPalette[theColor]);
             // colour reference
             rect(this.width, -this.height+margin-(x*rectSpacer), 15, 15);
         }
+    }
 
+    valueLabel(){
+        
+        push();
+        let margin = -70;
+        translate(margin, -this.height/2)
+        noStroke();
+        textStyle(BOLD);
+        textAlign(CENTER);
+        rotate(270); 
+        fill(255);
+        textSize(14);
+        text(this.data.rows[0].obj[this.valueLabelName].toUpperCase(), 0, 10);
+        pop();
     }
 
 }

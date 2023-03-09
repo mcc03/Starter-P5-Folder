@@ -105,7 +105,7 @@ class ScatterPlot{
     vAxis(){
         noFill();
         strokeWeight(1);
-        stroke(0);
+        stroke(255);
         line(0,0,0,-this.height)
     }
 
@@ -113,7 +113,7 @@ class ScatterPlot{
     hAxis(){
         noFill();
         strokeWeight(1);
-        stroke(0);
+        stroke(255);
         line(0,0,this.width,0)
     }
 
@@ -150,6 +150,7 @@ class ScatterPlot{
             // console.log(height)
             // console.log(weight)
 
+            fill(255);
             ellipse(height,-weight,5)
             pop();
         }
@@ -167,17 +168,12 @@ class ScatterPlot{
     }
 }
 
-// let num = 2701
-// for(let x = num; x %(mod) 7 ==0; x++){
-// roundMaxNum = x; 
-// }
-
     // draws labels on the y-axis
     chartLabels(){
         for(let x = 0; x <= this.markers ;x++){
             let labelValues = this.highestWeight()/this.markers;
             noStroke();
-            fill(0);
+            fill(255);
             textSize(14);
             textAlign(RIGHT, CENTER)
             text(int(x*labelValues).toFixed(0), -10, x*-this.markerGap);
@@ -190,7 +186,7 @@ class ScatterPlot{
         for(let x = 0; x <= this.markers ;x++){
             let labelValues = this.highestHeight()/this.markers;
             noStroke();
-            fill(0);
+            fill(255);
             textSize(14);
             textAlign(CENTER)
             text(int(labelValues*x).toFixed(0), x*this.markerGap, 15);

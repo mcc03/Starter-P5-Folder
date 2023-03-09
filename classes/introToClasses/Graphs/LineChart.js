@@ -13,6 +13,7 @@ class LineChart{
         _markerSize=-5, 
         _hGridLines=5, 
         _vGridLines=0,
+        _valueLabelName = "VALUE_LABEL"
     }){
 
         // this object height
@@ -30,6 +31,7 @@ class LineChart{
         this.leftMargin = 10;
         this.rightMargin = 10;
         this.hGridLines = _hGridLines;
+        this.valueLabelName = _valueLabelName;
         this.vGridLines = _vGridLines;
         // this.gridCount = _gridCount;
 
@@ -87,6 +89,7 @@ class LineChart{
         this.xAxisNames();
         this.chartTitle();
         this.trendLine();
+        this.valueLabel();
         pop();
     }
 
@@ -134,9 +137,9 @@ class LineChart{
             strokeWeight(2);
                 for(let y =0; y < this.chartValue.length; y++){
                     
-                    let theColor = x % colors.length;
+                    let theColor = x % colorPalette.length;
                     noFill();
-                    stroke(colors[theColor]);
+                    stroke(colorPalette[theColor]);
                     
                     let line1 = this.barScaler(int(-this.data.rows[x].obj[this.chartValue[y]]));
                     // draws a continous line
@@ -230,19 +233,27 @@ class LineChart{
             // draws legend name
             text(this.chartValue[x].toUpperCase(), this.width+rectSpacer, -this.height+(x*legendSpacer));
 
-            let theColor = x % colors.length;
-            fill(colors[theColor]);
+            let theColor = x % colorPalette.length;
+            fill(colorPalette[theColor]);
             // colour reference
             rect(this.width, -this.height+margin-(x*rectSpacer), 15, 15);
         }
-
     }
 
+        // draws the label for the axis that diplays the number values
+        valueLabel(){
+        
+            push();
+            let margin = -70;
+            translate(margin, -this.height/2)
+            noStroke();
+            textStyle(BOLD);
+            textAlign(CENTER);
+            rotate(270); 
+            fill(255);
+            textSize(14);
+            text(this.data.rows[0].obj[this.valueLabelName].toUpperCase(), 0, 10);
+            pop();
+        }
+
 }
-
-// let num = 2701
-// for(let x = num; x %(mod) 7 ==0; x++){
-// roundMaxNum = x; 
-// }
-
-// stacked barchart has nested for loop

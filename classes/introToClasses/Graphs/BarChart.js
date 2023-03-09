@@ -13,7 +13,9 @@ class BarChart{
         _markers=5,
         _markerSize=-5,
         _hGridLines=_markers,
+        _barLabel = "VALUE_M",
         _vGridLines=0,
+        _valueLabelName = "VALUE_LABEL",
         _data
     }){
 
@@ -26,12 +28,14 @@ class BarChart{
         this.xName = _xName;
         this.chartValue = _chartValue;
         this.chartName = _chartName;
+        this.barLabel = _barLabel
         this.maxValue = _maxValue;
         this.barGap = _barGap;
         this.markerSize = _markerSize
         this.markers = _markers;
         this.leftMargin = 10;
         this.rightMargin = 10;
+        this.valueLabelName = _valueLabelName;
         this.hGridLines = _hGridLines;
         this.vGridLines = _vGridLines;
         // this.gridCount = _gridCount;
@@ -101,6 +105,7 @@ class BarChart{
         this.xAxisNames();
         this.chartTitle();
         this.legend();
+        this.valueLabel();
 
         pop();
     }
@@ -156,8 +161,8 @@ class BarChart{
             // specified data
             for(let y =0; y < this.chartValue.length; y++){
                 // colors
-                let theColor = y % colors.length;
-                fill(colors[theColor]);
+                let theColor = y % colorPalette.length;
+                fill(colorPalette[theColor]);
                 
                 let height = this.barScaler(int(-this.data.rows[x].obj[this.chartValue[y]]));
                 noStroke();
@@ -208,13 +213,13 @@ class BarChart{
         noStroke();
         textStyle(BOLD);
         textAlign(CENTER)
-        let prop = "VALUE_M";
         fill(0);
-            for(let x=0; x < barCount; x++){
+            for(let x=0; x < this.data.getRowCount(); x++){
                 push();
+                fill(255);
                 this.masterBarGap = (x * this.barWidth) + (x * this.barGap) + this.leftMargin;
                 translate(this.masterBarGap + this.barWidth / 2, 0)
-                text(this.data.rows[x].obj[prop], 0, this.barScaler(-this.data.rows[x].obj[prop])-10);
+                text(this.data.rows[x].obj[this.barLabel], 0, this.barScaler(-this.data.rows[x].obj[this.barLabel])-10);
                 pop();
             }
     }
@@ -240,8 +245,8 @@ class BarChart{
     chartTitle(){
         let titleMargin = (this.height*-1)-40
         textAlign(CENTER);
+        textSize(14);
         textStyle(BOLD);
-        // let prop = 'At_work_school_or_college'
         text(this.data.rows[0].obj[this.chartName].toUpperCase(), this.width/2, titleMargin);
     }
 
@@ -258,12 +263,26 @@ class BarChart{
             // draws legend name
             text(this.chartValue[x].toUpperCase(), this.width+rectSpacer, -this.height+(x*legendSpacer));
 
-            let theColor = x % colors.length;
-            fill(colors[theColor]);
+            let theColor = x % colorPalette.length;
+            fill(colorPalette[theColor]);
             // colour reference
             rect(this.width, -this.height+margin-(x*rectSpacer), 15, 15);
         }
+    }
 
+    // draws the label for the axis that diplays the number values
+    valueLabel(){
+        
+        push();
+        let margin = -70;
+        translate(margin, -this.height/2)
+        textStyle(BOLD);
+        textAlign(CENTER);
+        rotate(270); 
+        fill(255);
+        textSize(14);
+        text(this.data.rows[0].obj[this.valueLabelName].toUpperCase(), 0, 10);
+        pop();
     }
 
 }

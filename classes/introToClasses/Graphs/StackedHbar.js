@@ -13,6 +13,8 @@ class StackedHbar{
         _hGridLines=0, 
         _vGridLines=5, 
         _chartValue,
+        _totalSums = "TOTALS_H_STACKE",
+        _valueLabelName = "VALUE_LABEL",
         _data       
     }){
 
@@ -31,6 +33,8 @@ class StackedHbar{
         this.vGridLines = _vGridLines;
         this.chartValue = _chartValue;
         this.chartName = _chartName;
+        this.totalSums = _totalSums;
+        this.valueLabelName = _valueLabelName;
         this.yName = _yName;
 
     // gap between markers
@@ -54,8 +58,8 @@ class StackedHbar{
         let maxValue = 0;
         for(let x=0; x < this.data.getRowCount(); x++){
             
-            if (int(data.rows[x].obj.TOTALS_STACKED) > maxValue){
-                maxValue = int(data.rows[x].obj.TOTALS_STACKED);
+            if (int(data.rows[x].obj[this.totalSums]) > maxValue){
+                maxValue = int(data.rows[x].obj[this.totalSums]);
             }
         }
         return maxValue;
@@ -75,7 +79,7 @@ class StackedHbar{
         translate(this.posX, this.posY);
         this.hGrid();
         this.vGrid();
-        this.sidewaysBarChart();
+        this.stackedHbarChart();
         this.vAxis();
         this.hAxis();
         this.chartMarkers();
@@ -84,11 +88,12 @@ class StackedHbar{
         this.yAxisNames();
         this.chartTitle();
         this.legend();
+        this.valueLabel();
         pop();
     }
 
     // draws bar chart
-    sidewaysBarChart(){
+    stackedHbarChart(){
 
         // let numbers = [];
        
@@ -114,13 +119,13 @@ class StackedHbar{
 
             push();
             for(let y = 0; y < this.chartValue.length; y++){
-                let theColor = y % colors.length;
-                fill(colors[theColor]);
+                let theColor = y % colorPalette.length;
+                fill(colorPalette[theColor]);
                 let height = -this.barScaler(int(-this.data.rows[x].obj[this.chartValue[y]]));
                 noStroke();
                 rect(0, 0, height, this.barWidth);
                 noFill();
-                stroke(240);
+                stroke(0);
                 line(0,0,0,this.barWidth);
                 // translates the next set of bars on top of each relative first bar
                 translate(height, 0);
@@ -179,14 +184,12 @@ class StackedHbar{
 
         fill(255);
             for(let x=0; x < this.data.getRowCount(); x++){
-                let prop = "TOTALS_STACKED"
-
                 push();
                 translate(0, this.topMargin + (x*this.barSpacing))
                 textStyle(BOLD);
                 textAlign(LEFT, CENTER);
-                let height = -this.barScaler(int(-this.data.rows[x].obj[prop]));
-                text(this.data.rows[x].obj[prop], height+5, this.barWidth/2);
+                let height = -this.barScaler(int(-this.data.rows[x].obj[this.totalSums]));
+                text(this.data.rows[x].obj[this.totalSums], height+5, this.barWidth/2);
                 pop();
             }
         }
@@ -251,13 +254,27 @@ class StackedHbar{
             // draws legend name
             text(this.chartValue[x].toUpperCase(), this.height+rectSpacer, this.width/2+(x*legendSpacer));
 
-            let theColor = x % colors.length;
-            fill(colors[theColor]);
+            let theColor = x % colorPalette.length;
+            fill(colorPalette[theColor]);
             // colour reference
             rect(this.height, this.width/2+margin-(x*rectSpacer), 15, 15);
         }
-
     }
+
+         // draws the label for the axis that diplays the number values
+         valueLabel(){
+        
+            push();
+            let margin = -50;
+            translate(this.height/2, this.width-margin)
+            textStyle(BOLD);
+            textAlign(CENTER);; 
+            fill(255);
+            textSize(14);
+            text(this.data.rows[0].obj[this.valueLabelName].toUpperCase(), 0, 10);
+            pop();
+        }
+
 }
 
 

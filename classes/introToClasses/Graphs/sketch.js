@@ -2,16 +2,12 @@ console.log("barcahrt with csv values");
 let data;
 let scatter;
 let stacked;
-// let barChartSelect = ["VALUE_M", "VALUE_F"];
-// let userSelect = ["VALUE_M2", "VALUE_F2"];
-let colors = ["#115f9a", "#1984c5", "#22a7f0", "#48b5c4", "#76c68f", "#a6d75b", "#c9e52f", "#d0ee11", "#d0f400"]
-;
+let colorPalette = ["#ea5545", "#f46a9b", "#ef9b20", "#edbf33", "#ede15b", "#bdcf32", "#87bc45", "#27aeef", "#b33dc6"];
 let charts=[];
 
 function preload() {
-    data = loadTable('./data/travel_time2016fix.csv', 'csv', 'header');
+    data = loadTable('./data/travel_time2016final.csv', 'csv', 'header');
     scatter = loadTable('./data/HeightWeight.csv', 'csv', 'header');
-    barData = loadTable('./data/stacked_travel2016.csv', 'csv', 'header');
 }
 
 function setup(){
@@ -31,6 +27,7 @@ function setup(){
         _data:data,
         _chartName: 'At_work_school_or_college', 
         _line:"AVG_R",
+        _barLabel: "VALUE_OTHER",
         _posX: 100
 
 }));
@@ -43,6 +40,7 @@ function setup(){
         _chartName: 'At_work_school_or_college2', 
         _data:data,
         _posX: 100, 
+        _totalSums: "TOTALS_STACKED",
         _tLine:"AVG_R"
 }));
 
@@ -63,6 +61,7 @@ function setup(){
         _yName: "County_of_residence",
         _chartName: 'At_work_school_or_college',
         _chartValue: ["VALUE_M", "VALUE_F", "VALUE_OTHER"],
+        _totalSums: "TOTALS_H_STACKED",
         _data:data,
         _posX: 650
     }));
@@ -101,7 +100,3 @@ function draw(){
     charts[4].render();
     charts[5].render();
 }
-
-
-// default parameters classes
-// tidy data function for sorting

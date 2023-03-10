@@ -2,7 +2,8 @@ console.log("barcahrt with csv values");
 let data;
 let scatter;
 let stacked;
-let colorPalette = ["#ea5545", "#f46a9b", "#ef9b20", "#edbf33", "#ede15b", "#bdcf32", "#87bc45", "#27aeef", "#b33dc6"];
+let colorPalette = ["#115f9a", "#c9e52f", "#22a7f0", "#48b5c4", "#76c68f", "#a6d75b", "#c9e52f", "#d0ee11", "#d0f400"]
+
 let charts=[];
 
 function preload() {
@@ -70,7 +71,7 @@ function setup(){
         _height: 300, 
         _width: 300,
         _xName: "County_of_residence2",
-        _chartValue: ["VALUE_M", "VALUE_F"],
+        _chartValue: ["VALUE_M", "VALUE_F", "VALUE_OTHER"],
         _data:data,
         _posX: 1200,
         _posY: 400

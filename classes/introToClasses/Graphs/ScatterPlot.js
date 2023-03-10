@@ -28,6 +28,7 @@ class ScatterPlot{
         this.rightMargin = 10;
         this.hGridLines = _hGridLines;
         this.vGridLines = _vGridLines;
+        // this.Nintervals = 6;
         // this.gridCount = _gridCount;
 
         // gap between markers
@@ -43,6 +44,17 @@ class ScatterPlot{
         console.log("highest weight is:", this.highestWeight());
         console.log("highest height is:", this.highestHeight());
         // console.log("barWidth:", this.barWidth);
+    }
+
+    IntervalsHeight(min, max, Nintervals){
+        max -= min;
+        let size = Math.round((max-1) / Nintervals);
+        let result = [];
+
+        for (let x =0; x < Nintervals; x++){
+            
+        }
+
     }
 
     highestWeight(){
@@ -145,8 +157,8 @@ class ScatterPlot{
             push();
             let prop = "HeightInches"
             let prop2 = "WeightPounds"
-            let height = this.plotHeightScaler(this.scatter.rows[x].obj[prop]);
-            let weight = this.plotWeightScaler(this.scatter.rows[x].obj[prop2]);
+            let height = this.scatter.rows[x].obj[prop];
+            let weight = this.scatter.rows[x].obj[prop2];
             // console.log(height)
             // console.log(weight)
 

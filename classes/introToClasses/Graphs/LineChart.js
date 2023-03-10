@@ -88,7 +88,7 @@ class LineChart{
         this.hAxis();
         this.xAxisNames();
         this.chartTitle();
-        this.trendLine();
+        this.lineChart();
         this.valueLabel();
         pop();
     }
@@ -128,49 +128,34 @@ class LineChart{
     }
 
     // draws a trendline based on avg values
-    trendLine() {
-        beginShape();
-        for(let x = 0; x < this.data.getRowCount(); x++){
+    lineChart() {
+        
+        for(let col = 0; col < this.chartValue.length; col++){
             
-            let xValue = this.leftMargin + (x*this.barSpacing) + (this.barWidth/2);
+            // spacing for each point on the lines
             
             strokeWeight(2);
-                for(let y =0; y < this.chartValue.length; y++){
-                    
-                    let theColor = x % colorPalette.length;
-                    noFill();
-                    stroke(colorPalette[theColor]);
-                    
-                    let line1 = this.barScaler(int(-this.data.rows[x].obj[this.chartValue[y]]));
-                    // draws a continous line
-                    vertex(xValue,line1);
-                    
-                    // draws circle at average point per bar
-                    ellipse(xValue,line1,10,10);
-                    endShape();
-                } 
-        }
-        
+            noFill();
+            let theColor = col % colorPalette.length;
 
-        // beginShape();
-        // for(let x = 0; x < this.data.getRowCount(); x++){
-
-        //     let xValue = this.leftMargin + (x*this.barSpacing) + (this.barWidth/2);
+            stroke(colorPalette[theColor]);
+            beginShape();
             
-        //     strokeWeight(2);
-        //         for(let y =0; y < this.chartValue.length; y++){
-        //             let theColor = x % colors.length;
-        //             noFill();
-        //             stroke(colors[theColor]);
-        //             let line1 = this.barScaler(int(-this.data.rows[x].obj[this.chartValue[1]]));
-        //             // draws a continous line
-        //             vertex(xValue,line1);
-        //             // draws circle at average point per bar
-        //             ellipse(xValue,line1,10,10);
-        //             endShape();
-        //         }  
-        // }
-        
+            // gets y-axis position for each point
+                for(let row = 0; row < this.data.getRowCount(); row++){
+                
+                    // spacing between each point on a line
+                    let xValue = (row*this.barSpacing)
+                    let line1 = this.barScaler(int(-this.data.rows[row].obj[this.chartValue[col]]));
+                    
+                    // console.log("psacing", col,xValue*row,line1)
+                    noFill();
+                    // draws a continous line 
+                    vertex(xValue,line1);
+                    ellipse(xValue,line1,4);
+                } 
+                endShape();     
+        }
     }
 
     // draws marks on Vaxis
@@ -199,7 +184,7 @@ class LineChart{
         for(let x = 0; x < this.data.getRowCount(); x++){
             push();
             this.masterBarGap = (x * this.barWidth) + (x * this.barGap) + this.leftMargin;
-            translate(this.masterBarGap + this.barWidth / 2, 10)
+            translate(this.leftMargin+(x*this.width/this.data.getRowCount()), 10)
             textStyle(NORMAL);
             textAlign(LEFT);
             noStroke();

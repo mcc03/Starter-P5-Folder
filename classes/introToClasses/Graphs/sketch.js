@@ -2,9 +2,11 @@ console.log("barcahrt with csv values");
 let data;
 let scatter;
 let stacked;
-let colorPalette = ["#115f9a", "#c9e52f", "#22a7f0", "#48b5c4", "#76c68f", "#a6d75b", "#c9e52f", "#d0ee11", "#d0f400"]
+// sets the colours to be used across all graphs
+let colorPalette = ["#e85d04","#f48c06","#faa307","#ffba08"]
+let lineChartPalette = ["#ffba08","#9d0208","#e85d04","#f48c06","#faa307"]
 
-let charts=[];
+let charts= [];
 
 function preload() {
     data = loadTable('./data/travel_time2016final.csv', 'csv', 'header');
@@ -12,7 +14,7 @@ function preload() {
 }
 
 function setup(){
-    createCanvas(1800, 1000);
+    createCanvas(1920, 1080);
     angleMode(DEGREES);
     rectMode(CORNER);
 
@@ -52,7 +54,7 @@ function setup(){
         _chartName: 'At_work_school_or_college',
         _chartValue: "VALUE_F",
         _data:data,
-        _posX: 650
+        _posX: 680
     
     }));
 
@@ -64,7 +66,7 @@ function setup(){
         _chartValue: ["VALUE_M", "VALUE_F", "VALUE_OTHER"],
         _totalSums: "TOTALS_H_STACKED",
         _data:data,
-        _posX: 650
+        _posX: 680
     }));
 
     charts.push(new LineChart({
@@ -81,7 +83,7 @@ charts.push(new ScatterPlot({
     _height: 300, 
     _width: 300, 
     _xName:"County_of_residence",
-    _markers: 5,
+    _markers: 7,
     _markerSize: -5,
     _barGap: 10,
     _scatter:scatter,

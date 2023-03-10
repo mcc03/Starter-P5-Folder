@@ -28,7 +28,6 @@ class ScatterPlot{
         this.rightMargin = 10;
         this.hGridLines = _hGridLines;
         this.vGridLines = _vGridLines;
-        // this.Nintervals = 6;
         // this.gridCount = _gridCount;
 
         // gap between markers
@@ -46,17 +45,7 @@ class ScatterPlot{
         // console.log("barWidth:", this.barWidth);
     }
 
-    IntervalsHeight(min, max, Nintervals){
-        max -= min;
-        let size = Math.round((max-1) / Nintervals);
-        let result = [];
-
-        for (let x =0; x < Nintervals; x++){
-            
-        }
-
-    }
-
+    // gets highest weight value
     highestWeight(){
         let maxValue = 0;
         for(let x=0; x < this.scatter.getRowCount(); x++){
@@ -68,6 +57,7 @@ class ScatterPlot{
         return maxValue;
     }
 
+    // gets highest height value
     highestHeight(){
         let maxValue = 0;
         for(let x=0; x < this.scatter.getRowCount(); x++){
@@ -79,7 +69,7 @@ class ScatterPlot{
         return maxValue;
     }
 
-    // calculates how to scale bars based off the highest value
+    // calculates placement of y-axis values
     plotWeightScaler(_scalingNum){
         for(let x = 0; x < this.scatter.getRowCount(); x++){
             let scaleValue = this.height/this.highestWeight();
@@ -88,6 +78,7 @@ class ScatterPlot{
         }
     }
 
+    // calculates placement of x-axis values
     plotHeightScaler(_scalingNum){
         for(let x = 0; x < this.scatter.getRowCount(); x++){
             let scaleValue = this.height/this.highestHeight();
@@ -95,11 +86,29 @@ class ScatterPlot{
         }
     }
 
+    // I want to calculate the intervals between the min and a max value with a custom interval count
+    heightIntervals(){
+        // finding mix and max values for height
+        let minHeight = this.scatter.rows[0].obj['min max height']
+        let maxHeight = this.scatter.rows[1].obj['min max height']
+
+        // setting empty array to push the intervals into
+        let arrayHeights = [];
+
+        let range = maxHeight - minHeight;
+        let numIntervals = range/6;
+        
+        // min height + numIntervals until it reaches maxHeight
+        for(let x = minHeight; x < maxHeight; x+numIntervals){
+            arrayHeights.push(x);
+        }
+    }
+
     // draws the functions when called
     render(){
         push();
         translate(this.posX, this.posY);
-
+        // this.heightIntervals();
         this.hGrid();
         this.vGrid();
         this.vAxis();
@@ -109,7 +118,7 @@ class ScatterPlot{
         this.xAxisNames();
         this.xChartLabels();
         this.scatterPlot();
-        // this.chartTitle();
+        this.chartTitle();
         pop();
     }
 
@@ -152,18 +161,20 @@ class ScatterPlot{
     }
 
     scatterPlot(){
-
         for(let x = 0; x < this.scatter.getRowCount(); x++){
             push();
             let prop = "HeightInches"
             let prop2 = "WeightPounds"
-            let height = this.scatter.rows[x].obj[prop];
-            let weight = this.scatter.rows[x].obj[prop2];
+            let height = this.plotHeightScaler(this.scatter.rows[x].obj[prop]);
+            let weight = this.plotWeightScaler(this.scatter.rows[x].obj[prop2]);
             // console.log(height)
             // console.log(weight)
 
-            fill(255);
-            ellipse(height,-weight,5)
+            let theColor = x % colorPalette.length;
+            fill(colorPalette[theColor]);
+            ellipse(height, -weight,5)
+
+            // console.log(x)
             pop();
         }
         
@@ -183,12 +194,13 @@ class ScatterPlot{
     // draws labels on the y-axis
     chartLabels(){
         for(let x = 0; x <= this.markers ;x++){
-            let labelValues = this.highestWeight()/this.markers;
+            // let labelValues = this.highestWeight()/this.markers;
+            let intervalsWeight = [90, 100, 110, 120, 130, 140, 150, 160]
             noStroke();
             fill(255);
             textSize(14);
             textAlign(RIGHT, CENTER)
-            text(int(x*labelValues).toFixed(0), -10, x*-this.markerGap);
+            text(intervalsWeight[x], -10, x*-this.markerGap);
         }
     }
 
@@ -196,12 +208,13 @@ class ScatterPlot{
     xChartLabels(){
 
         for(let x = 0; x <= this.markers ;x++){
-            let labelValues = this.highestHeight()/this.markers;
+            // let labelValues = this.highestHeight()/this.markers;
+            let intervalsHeight = [62, 64, 66, 68, 70, 72, 74, 76]
             noStroke();
             fill(255);
             textSize(14);
             textAlign(CENTER)
-            text(int(labelValues*x).toFixed(0), x*this.markerGap, 15);
+            text(intervalsHeight[x], x*this.markerGap, 15);
         }
     }
 
@@ -223,12 +236,12 @@ class ScatterPlot{
     }
     
     // draws chart title
-    // chartTitle(){
-    //     let titleMargin = (this.height*-1)-40
-    //     textAlign(CENTER);
-    //     textStyle(BOLD);
-    //     let prop = 'At_work_school_or_college'
-    //     text(this.scatter.rows[0].obj[prop].toUpperCase(), this.width/2, titleMargin);
-    // }
+    chartTitle(){
+        let titleMargin = (this.height*-1)-40
+        fill(255);
+        textAlign(CENTER);
+        textStyle(BOLD);
+        text("height and weight scatter plot".toUpperCase(), this.width/2, titleMargin);
+    }
 
 }

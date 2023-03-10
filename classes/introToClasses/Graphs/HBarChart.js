@@ -94,20 +94,6 @@ class HBarChart{
     // draws bar chart
     sidewaysBarChart(){
 
-        // let numbers = [];
-       
-        // for(let x = 0; x < this.bars; x++){
-        // // let numbers = [this.data.rows[x].obj.VALUE_F];
-        
-        //     numbers.push(int(this.data.rows[x].obj.VALUE_F))
-        // }
-        // // console.log(numbers);
-       
-        // numbers.sort(function(a, b){
-        //    return a-b;
-            
-        // });
-        // console.log(numbers);
         let barCount = this.data.getRowCount();
 
         for(let x = 0; x < barCount; x++){
@@ -187,6 +173,7 @@ class HBarChart{
         for(let x = 0; x < this.data.getRowCount(); x++){
             push();
             translate(0, this.topMargin + (x*this.barSpacing))
+            textSize(14);
             textStyle(NORMAL);
             textAlign(RIGHT, CENTER);
             let labelName = yAxisLabels[x] 
@@ -197,29 +184,25 @@ class HBarChart{
 
      // draw horizontal grid lines
     hGrid(){
-        // if(this.gridCount == true){
             for(let x = 1; x <= this.hGridLines ;x++){
                 stroke(255, 100);
                 strokeWeight(2);
                 line(this.markerSize, x*this.markerGap, this.height, x*this.markerGap)
             }
-        // }   
     }
     
      // draw vertical grid lines
     vGrid(){
-        // if(this.gridCount == true){
             for(let x = 1; x <= this.vGridLines ;x++){
                 stroke(255, 100);
                 strokeWeight(2);
                 line(x*this.height/this.vGridLines, this.width, x*this.height/this.vGridLines, 0)
-            }
-        // }   
+            } 
     }
 
     // draws chart title
     chartTitle(){
-        let titleMargin = -10;
+        let titleMargin = -25;
         textSize(14);
         textAlign(CENTER);
         textStyle(BOLD);
@@ -227,20 +210,28 @@ class HBarChart{
         text(this.data.rows[0].obj[this.chartName].toUpperCase(), this.height/2, titleMargin);
     }
 
+    // draws legends
     legend(){
         noStroke();
         for(let x = 0; x < this.chartValue.length; x++){
-            let legendSpacer = 20;
-            let rectSpacer = 20;
+            let legendXpos = 10;
+            let xPos = this.height;
+            let yPos = this.width/2;
+            let legendTextSpace = 25;
+
+            // each loop moves the legends down
+            yPos+= x*30
+       
+            // colours the legends with the relative data series
+            let theColor = x % colorPalette.length;
+            fill(colorPalette[theColor]);
+            rect(xPos, yPos, 20);
+
             textAlign(LEFT);
             textStyle(BOLD);
             fill(255);
-            text(this.chartValue[x].toUpperCase(), this.height+20, this.width/2+(x*legendSpacer));
-
-            let theColor = x % colorPalette.length;
-            
-            fill(colorPalette[theColor]);
-            rect(this.height, this.width/2+(x*rectSpacer), 15, 15);
+            // draws legend name
+            text(this.chartValue[x].toUpperCase(), xPos+legendTextSpace, yPos+10);
         }
     }
 

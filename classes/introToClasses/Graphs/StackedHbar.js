@@ -87,8 +87,8 @@ class StackedHbar{
         this.barLabels();
         this.yAxisNames();
         this.chartTitle();
-        this.legend();
         this.valueLabel();
+        this.legend();
         pop();
     }
 
@@ -180,7 +180,6 @@ class StackedHbar{
     barLabels(){
         textSize(16);
         noStroke();
-        textAlign(CENTER);
 
         fill(255);
             for(let x=0; x < this.data.getRowCount(); x++){
@@ -202,6 +201,7 @@ class StackedHbar{
             push();
             fill(255);
             translate(0, this.topMargin + (x*this.barSpacing))
+            textSize(14);
             textStyle(NORMAL);
             textAlign(RIGHT, CENTER);
             let labelName = yAxisLabels[x] 
@@ -234,7 +234,7 @@ class StackedHbar{
 
     // draws chart title
     chartTitle(){
-        let titleMargin = -10;
+        let titleMargin = -25;
         textAlign(CENTER);
         textSize(14);
         textStyle(BOLD);
@@ -242,22 +242,29 @@ class StackedHbar{
         text(this.data.rows[0].obj[this.chartName].toUpperCase(), this.height/2, titleMargin);
     }
 
+    // draws legends
     legend(){
         noStroke();
         for(let x = 0; x < this.chartValue.length; x++){
-            let legendSpacer = 20;
-            let rectSpacer = 20;
-            let margin = 30;
+            let legendXpos = 10;
+            let xPos = this.height+legendXpos;
+            let yPos = this.width/2;
+            let legendTextSpace = 25;
+
+            // each loop moves the legends down
+            yPos+= x*30
+       
+            let theColor = x % colorPalette.length;
+            fill(colorPalette[theColor]);
+            // colour reference
+            rectMode()
+            rect(xPos, yPos, 20);
+
             textAlign(LEFT);
             textStyle(BOLD);
             fill(255);
             // draws legend name
-            text(this.chartValue[x].toUpperCase(), this.height+rectSpacer, this.width/2+(x*legendSpacer));
-
-            let theColor = x % colorPalette.length;
-            fill(colorPalette[theColor]);
-            // colour reference
-            rect(this.height, this.width/2+margin-(x*rectSpacer), 15, 15);
+            text(this.chartValue[x].toUpperCase(), xPos+legendTextSpace, yPos+10);
         }
     }
 
@@ -268,7 +275,7 @@ class StackedHbar{
             let margin = -50;
             translate(this.height/2, this.width-margin)
             textStyle(BOLD);
-            textAlign(CENTER);; 
+            textAlign(CENTER);
             fill(255);
             textSize(14);
             text(this.data.rows[0].obj[this.valueLabelName].toUpperCase(), 0, 10);

@@ -49,20 +49,11 @@ class BarChart{
         // calculates bar spacing
         this.barSpacing = this.barWidth+this.barGap;
 
-        // gets highest value from arrayName
-        // this.highestValue = int(this.data.rows[0].obj[this.maxValue]);
-
-        // for(let x=0; x<this.data.getRowCount() -1; x++){
-        //     if(int(this.data.rows[x].obj[this.maxValue]) > this.highestValue){
-        //         this.highestValue = int(this.data.rows[x].obj[this.maxValue]);
-        //     }
-        // }
-
-        // gap between labels
         console.log("highest value for normal barchart is:", this.highestValue())
         // console.log("barWidth:", this.barWidth);
     }
 
+    // find highest value from specified object property
     highestValue(){
         let maxValue = 0;
         for(let x=0; x < this.data.getRowCount(); x++){
@@ -80,14 +71,6 @@ class BarChart{
             return _scalingNum*scaleValue;
         }
     }
-
-    // capitalFirst(str){
-    // return str
-    //     .toLowerCase()
-    //     .split(' ')
-    //     .map((word) => word.charAt(0).toUpperCase() + word.slice(1))
-    //     .join(' ');
-    // }
 
     // draws the functions when called
     render(){
@@ -128,24 +111,20 @@ class BarChart{
 
     // draw horizontal grid lines
     hGrid(){
-        // if(this.gridCount == true){
             for(let x = 1; x <= this.hGridLines ;x++){
                 stroke(255, 100);
                 strokeWeight(2);
                 line(this.markerSize, x*-this.markerGap, this.width, x*-this.markerGap)
             }
-        // }   
     }
     
      // draw vertical grid lines
     vGrid(){
-        // if(this.gridCount == true){
             for(let x = 1; x <= this.vGridLines ;x++){
                 stroke(255);
                 strokeWeight(2);
                 line(x*this.width/this.vGridLines, -this.height, x*this.width/this.vGridLines, 0)
             }
-        // }   
     }
 
     // draws bars
@@ -204,10 +183,7 @@ class BarChart{
         }
     }
 
-    // placement of number above bar
-    /* VERTICAL SPACING: Here I want to loop through the array of objects, getting the value of sales from each object 
-    + x amount of spacing to appear above the bar. I also use the scaler function to scale the values to match the bars*/
-    // HORIZONTAL SPACING: Here I want to space them horizontally to line up above the corresponding bar 
+    // draws values above relative bars
     barLabels(){
         textSize(16);
         noStroke();
@@ -219,6 +195,8 @@ class BarChart{
                 fill(255);
                 this.masterBarGap = (x * this.barWidth) + (x * this.barGap) + this.leftMargin;
                 translate(this.masterBarGap + this.barWidth / 2, 0)
+                
+                // draws the values
                 text(this.data.rows[x].obj[this.barLabel], 0, this.barScaler(-this.data.rows[x].obj[this.barLabel])-10);
                 pop();
             }
@@ -232,7 +210,7 @@ class BarChart{
             this.masterBarGap = (x * this.barWidth) + (x * this.barGap) + this.leftMargin;
             translate(this.masterBarGap + this.barWidth/2, 10)
             textStyle(NORMAL);
-            textSize(16);
+            textSize(14);
             textAlign(LEFT);
             rotate(30); 
             let labelName = xAxisLabels[x]
@@ -254,19 +232,24 @@ class BarChart{
     legend(){
         noStroke();
         for(let x = 0; x < this.chartValue.length; x++){
-            let legendSpacer = 20;
-            let rectSpacer = 20;
-            let margin = 30;
+            let legendXpos = 10;
+            let xPos = this.width+legendXpos;
+            let yPos = -this.height;
+            let legendTextSpace = 25;
+
+            // each loop moves the legends down
+            yPos+= x*30
+       
+            // colours the legends with the relative data series
+            let theColor = x % colorPalette.length;
+            fill(colorPalette[theColor]);
+            rect(xPos, yPos, 20);
+
             textAlign(LEFT);
             textStyle(BOLD);
             fill(255);
             // draws legend name
-            text(this.chartValue[x].toUpperCase(), this.width+rectSpacer, -this.height+(x*legendSpacer));
-
-            let theColor = x % colorPalette.length;
-            fill(colorPalette[theColor]);
-            // colour reference
-            rect(this.width, -this.height+margin-(x*rectSpacer), 15, 15);
+            text(this.chartValue[x].toUpperCase(), xPos+legendTextSpace, yPos+10);
         }
     }
 
@@ -284,12 +267,4 @@ class BarChart{
         text(this.data.rows[0].obj[this.valueLabelName].toUpperCase(), 0, 10);
         pop();
     }
-
 }
-
-// let num = 2701
-// for(let x = num; x %(mod) 7 ==0; x++){
-// roundMaxNum = x; 
-// }
-
-// stacked barchart has nested for loop

@@ -13,6 +13,7 @@ class LineChart{
         _markerSize=-5, 
         _hGridLines=5, 
         _vGridLines=0,
+        _chartName = "At_work_school_or_college2",
         _valueLabelName = "VALUE_LABEL"
     }){
 
@@ -33,7 +34,7 @@ class LineChart{
         this.hGridLines = _hGridLines;
         this.valueLabelName = _valueLabelName;
         this.vGridLines = _vGridLines;
-        // this.gridCount = _gridCount;
+        this.chartName = _chartName
 
         // gap between markers
         this.markerGap = this.height/this.markers;
@@ -43,16 +44,6 @@ class LineChart{
 
         // calculates bar spacing
         this.barSpacing = this.barWidth+this.barGap;
-
-        // gets highest value from arrayName
-        // this.highestValue = Math.max(...fruits.map(object => object.sales));
-        // this.highestValue = int(this.data.rows[0].obj.MAX_S);
-
-        // for(let x=0; x<this.bars -1; x++){
-        //     if(int(this.data.rows[x].obj.MAX_S) > this.highestValue){
-        //         this.highestValue = int(this.data.rows[x].obj.MAX_S);
-        //     }
-        // }
 
         console.log("linechart highest value is:", this.highestValue())
         console.log("barWidth:", this.barWidth);
@@ -79,7 +70,6 @@ class LineChart{
     render(){
         push();
         translate(this.posX, this.posY);
-        this.legend();
         this.hGrid();
         this.vGrid();
         this.chartMarkers();
@@ -90,6 +80,7 @@ class LineChart{
         this.chartTitle();
         this.lineChart();
         this.valueLabel();
+        this.legend();
         pop();
     }
 
@@ -135,10 +126,9 @@ class LineChart{
             // spacing for each point on the lines
             
             strokeWeight(2);
-            noFill();
-            let theColor = col % colorPalette.length;
+            let theColor = col % lineChartPalette.length;
 
-            stroke(colorPalette[theColor]);
+            stroke(lineChartPalette[theColor]);
             beginShape();
             
             // gets y-axis position for each point
@@ -148,11 +138,11 @@ class LineChart{
                     let xValue = (row*this.barSpacing)
                     let line1 = this.barScaler(int(-this.data.rows[row].obj[this.chartValue[col]]));
                     
-                    // console.log("psacing", col,xValue*row,line1)
-                    noFill();
-                    // draws a continous line 
+                    // draws a continous line for each data row
                     vertex(xValue,line1);
-                    ellipse(xValue,line1,4);
+                    fill(lineChartPalette[theColor]);
+                    ellipse(xValue,line1,8);
+                    noFill();
                 } 
                 endShape();     
         }
@@ -173,18 +163,20 @@ class LineChart{
             let labelValues = this.highestValue()/this.markers;
             noStroke();
             fill(255);
-            textSize(12);
+            textSize(14);
             textAlign(RIGHT, CENTER)
             text(int(x*labelValues).toFixed(0), -10, x*-this.markerGap);
         }
     }
 
+    // draws labels on x-axis
     xAxisNames(){
         let xAxisLabels = data.getColumn(this.xName);
         for(let x = 0; x < this.data.getRowCount(); x++){
             push();
             this.masterBarGap = (x * this.barWidth) + (x * this.barGap) + this.leftMargin;
             translate(this.leftMargin+(x*this.width/this.data.getRowCount()), 10)
+            textSize(14);
             textStyle(NORMAL);
             textAlign(LEFT);
             noStroke();
@@ -195,33 +187,39 @@ class LineChart{
         }
     }
 
+    // draws chart title
     chartTitle(){
         let titleMargin = -this.height-40
         noStroke();
+        fill(255);
         textSize(14);
         textAlign(CENTER);
         textStyle(BOLD);
-        let prop = 'At_work_school_or_college2'
-        text(this.data.rows[0].obj[prop].toUpperCase(), this.width/2, titleMargin);
+        text(this.data.rows[0].obj[this.chartName].toUpperCase(), this.width/2, titleMargin);
     }
 
     // draws legends
     legend(){
         noStroke();
         for(let x = 0; x < this.chartValue.length; x++){
-            let legendSpacer = 20;
-            let rectSpacer = 20;
-            let margin = 30;
+            let legendXpos = 10;
+            let xPos = this.width+legendXpos;
+            let yPos = -this.height;
+            let legendTextSpace = 25;
+
+            // each loop moves the legends down
+            yPos+= x*30
+    
+            // colours the legends with the relative data series
+            let theColor = x % lineChartPalette.length;
+            fill(lineChartPalette[theColor]);
+            rect(xPos, yPos, 20);
+
             textAlign(LEFT);
             textStyle(BOLD);
             fill(255);
             // draws legend name
-            text(this.chartValue[x].toUpperCase(), this.width+rectSpacer, -this.height+(x*legendSpacer));
-
-            let theColor = x % colorPalette.length;
-            fill(colorPalette[theColor]);
-            // colour reference
-            rect(this.width, -this.height+margin-(x*rectSpacer), 15, 15);
+            text(this.chartValue[x].toUpperCase(), xPos+legendTextSpace, yPos+10);
         }
     }
 

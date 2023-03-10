@@ -1,5 +1,4 @@
 class StackedBar{
-    // defines properties in object
     constructor({
         _height=400,
         _width=400,
@@ -67,7 +66,7 @@ class StackedBar{
         let maxValue = 0;
         for(let x=0; x < this.data.getRowCount(); x++){
             
-            if (int(data.rows[x].obj[this.totalSums]) > maxValue){
+            if ((data.rows[x].obj[this.totalSums]) > maxValue){
                 maxValue = int(data.rows[x].obj[this.totalSums]);
             }
         }
@@ -84,7 +83,6 @@ class StackedBar{
     render(){
         push();
         translate(this.posX, this.posY);
-        this.legend();
         this.hGrid();
         this.vGrid();
         this.stackedChart();
@@ -97,6 +95,7 @@ class StackedBar{
         this.chartTitle();
         this.trendLine();
         this.valueLabel();
+        this.legend();
         pop();
     }
 
@@ -168,16 +167,18 @@ class StackedBar{
         for(let x = 0; x < this.data.getRowCount(); x++){
          
             let xValue = this.leftMargin + (x*this.barSpacing) + (this.barWidth/2);
-            noFill()
             stroke(255);
-            strokeWeight(2);
+            strokeWeight(3);
             
             let avgPointY = this.barScaler(int(-this.data.rows[x].obj[this.tLine]))
-            
+  
             // draws a continous line
             vertex(xValue,avgPointY);
+
+            fill(255);
             // draws circle at average point per bar
-            ellipse(xValue,avgPointY,10,10)
+            ellipse(xValue,avgPointY,8)
+            noFill()
 
         }
         endShape();
@@ -198,7 +199,7 @@ class StackedBar{
             let labelValues = this.highestValue()/this.markers;
             noStroke();
             fill(255);
-            textSize(12);
+            textSize(14);
             textAlign(RIGHT, CENTER)
             text(int(x*labelValues).toFixed(0), -10, x*-this.markerGap);
         }
@@ -223,12 +224,14 @@ class StackedBar{
             }
     }
 
+    // draws x-axis labels
     xAxisNames(){
         let xAxisLabels = data.getColumn(this.xName);
         for(let x = 0; x < this.data.getRowCount(); x++){
             push();
             this.masterBarGap = (x * this.barWidth) + (x * this.barGap) + this.leftMargin;
             translate(this.masterBarGap + this.barWidth / 2, 10)
+            textSize(14);
             textStyle(NORMAL);
             textAlign(LEFT);
             noStroke();
@@ -248,25 +251,32 @@ class StackedBar{
         text(this.data.rows[0].obj[this.chartName].toUpperCase(), this.width/2, titleMargin);
     }
 
-    legend(){
+     // draws legends
+     legend(){
         noStroke();
         for(let x = 0; x < this.chartValue.length; x++){
-            let legendSpacer = 20;
-            let rectSpacer = 20;
-            let margin = 30;
+            let legendXpos = 10;
+            let xPos = this.width+legendXpos;
+            let yPos = -this.height;
+            let legendTextSpace = 25;
+
+            // each loop moves the legends down
+            yPos+= x*30
+       
+            // colours the legends with the relative data series
+            let theColor = x % colorPalette.length;
+            fill(colorPalette[theColor]);
+            rect(xPos, yPos, 20);
+
             textAlign(LEFT);
             textStyle(BOLD);
             fill(255);
             // draws legend name
-            text(this.chartValue[x].toUpperCase(), this.width+rectSpacer, -this.height+(x*legendSpacer));
-
-            let theColor = x % colorPalette.length;
-            fill(colorPalette[theColor]);
-            // colour reference
-            rect(this.width, -this.height+margin-(x*rectSpacer), 15, 15);
+            text(this.chartValue[x].toUpperCase(), xPos+legendTextSpace, yPos+10);
         }
     }
 
+    // draws the label for the axis that diplays the number values
     valueLabel(){
         
         push();
@@ -283,10 +293,3 @@ class StackedBar{
     }
 
 }
-
-// let num = 2701
-// for(let x = num; x %(mod) 7 ==0; x++){
-// roundMaxNum = x; 
-// }
-
-// stacked barchart has nested for loop
